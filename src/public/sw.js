@@ -17,7 +17,8 @@ var limits = {
 let coreAssets = [ '/offline.html',  'favicon.ico', '/css/shropshire-style.css','/js/Leaflet.MetricGrid.js', 'https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet-src.js'
     ,'https://cdn.jsdelivr.net/npm/wicket@1.3.6/wicket.min.js', '/js/proj4.js', '/js/leaflet.wms.js', '/js/BasicMap.js', '/js/update-dataset.js',
     'https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js', 'https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet-src.js',
-    '/js/Leaflet.MetricGrid.js', '/js/species-name-autocomplete.js', '/manifest.webmanifest', '/css/enhancements.css', 'https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.css'];
+    '/js/Leaflet.MetricGrid.js', '/js/species-name-autocomplete.js', '/manifest.webmanifest', '/css/enhancements.css', 'https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.css'
+    , 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js', 'https://unpkg.com/brc-atlas-bigr/dist/bigr.min.umd.js', 'https://d3js.org/d3.v5.min.js' ];
 
 
 //
