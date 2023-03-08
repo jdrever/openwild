@@ -1,86 +1,143 @@
-//from: https://gist.github.com/cferdinandi/6e4a73a69b0ee30c158c8dd37d314663
+/*! GMT Service Worker v2.8.0 | (c) 2022 Chris Ferdinandi | MIT License | http://github.com/cferdinandi/gmt-theme */
 
-// Core assets
-let coreAssets = [ '/offline.html', '/', 'favicon.ico', '/js/Leaflet.MetricGrid.js', 'https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet-src.js'];
+var version = 'ow_1.0.0';
+// Cache IDs
+var coreID = version + '_core';
+var pageID = version + '_pages';
+var imgID = version + '_img';
+var queryId = version + '_query';
+var cacheIDs = [coreID, pageID, imgID];
 
-// On install, cache core assets
+// Max number of files in cache
+var limits = {
+	pages: 35,
+	imgs: 20
+};
+
+let coreAssets = [ '/offline.html',  'favicon.ico', '/css/shropshire-style.css','/js/Leaflet.MetricGrid.js', 'https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet-src.js'
+    ,'https://cdn.jsdelivr.net/npm/wicket@1.3.6/wicket.min.js', '/js/proj4.js', '/js/leaflet.wms.js', '/js/BasicMap.js', '/js/update-dataset.js',
+    'https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js', 'https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet-src.js',
+    '/js/Leaflet.MetricGrid.js', '/js/species-name-autocomplete.js', '/manifest.webmanifest', '/css/enhancements.css', 'https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.css'];
+
+
+//
+// Methods
+//
+
+/**
+ * Remove cached items over a certain number
+ * @param  {String}  key The cache key
+ * @param  {Integer} max The max number of items allowed
+ */
+var trimCache = function (key, max) {
+	caches.open(key).then(function (cache) {
+		cache.keys().then(function (keys) {
+			if (keys.length <= max) return;
+			cache.delete(keys[0]).then(function () {
+				trimCache(key, max);
+			});
+		});
+	});
+};
+
+
+//
+// Event Listeners
+//
+
+// On install, cache some stuff
 self.addEventListener('install', function (event) {
-
-	// Cache core assets
-	event.waitUntil(caches.open('app').then(function (cache) {
-		for (let asset of coreAssets) {
+	self.skipWaiting();
+	event.waitUntil(caches.open(coreID).then(function (cache) {
+		coreAssets.forEach(function (asset) {
 			cache.add(new Request(asset));
-		}
+		});
 		return cache;
 	}));
-
 });
 
-// Listen for request events
+// On version update, remove old cached files
+self.addEventListener('activate', function (event) {
+	event.waitUntil(caches.keys().then(function (keys) {
+		return Promise.all(keys.filter(function (key) {
+			return !cacheIDs.includes(key);
+		}).map(function (key) {
+			return caches.delete(key);
+		}));
+	}).then(function () {
+		return self.clients.claim();
+	}));
+});
+
+// listen for requests
 self.addEventListener('fetch', function (event) {
+
 	// Get the request
-	let request = event.request;
+	var request = event.request;
 
 	// Bug fix
 	// https://stackoverflow.com/a/49719964
 	if (event.request.cache === 'only-if-cached' && event.request.mode !== 'same-origin') return;
+
+	// Ignore non-GET requests
+	if (request.method !== 'GET') return;
 
 	// HTML files
 	// Network-first
 	if (request.headers.get('Accept').includes('text/html')) {
 		event.respondWith(
 			fetch(request).then(function (response) {
-
-				// Create a copy of the response and save it to the cache
-				let copy = response.clone();
-				event.waitUntil(caches.open('app').then(function (cache) {
-					return cache.put(request, copy);
-				}));
-
-				// Return the response
+				if (response.type !== 'opaque') {
+					var copy = response.clone();
+					event.waitUntil(caches.open(pageID).then(function (cache) {
+						return cache.put(request, copy);
+					}));
+				}
 				return response;
-
 			}).catch(function (error) {
-
-				// If there's no item in cache, respond with a fallback
 				return caches.match(request).then(function (response) {
-					return response || caches.match('/offline.html');
-				});
-
-			})
-		);
-	}
-
-	// CSS & JavaScript
-	// Offline-first
-	if (request.headers.get('Accept').includes('text/css') || request.headers.get('Accept').includes('text/javascript')) {
-		event.respondWith(
-			caches.match(request).then(function (response) {
-				return response || fetch(request).then(function (response) {
-
-					// Return the response
-					return response;
-
+					return response || caches.match('/offline/');
 				});
 			})
 		);
 		return;
 	}
 
-	// Images
+	if (request.url.includes('/refresh?') ) {
+		event.respondWith(
+			fetch(request).then(function (response) {
+				if (response.type !== 'opaque') {
+					var copy = response.clone();
+					event.waitUntil(caches.open(pageID).then(function (cache) {
+						return cache.put(request, copy);
+					}));
+				}
+				return response;
+			}).catch(function (error) {
+				return caches.match(request).then(function (response) {
+					return response || caches.match('/offline/');
+				});
+			})
+		);
+		return;
+	}
+
+	// Images & Fonts
 	// Offline-first
-	if (request.headers.get('Accept').includes('image')) {
+	if (request.headers.get('Accept').includes('image') || request.url.includes('.woff') || request.url.includes('.css') || request.url.includes('.js') || request.url.includes('.webmanifest')) {
 		event.respondWith(
 			caches.match(request).then(function (response) {
 				return response || fetch(request).then(function (response) {
 
-					// Save a copy of it in cache
-					let copy = response.clone();
-					event.waitUntil(caches.open('app').then(function (cache) {
-						return cache.put(request, copy);
-					}));
+					// If an image, stash a copy of this image in the images cache
+					if (request.headers.get('Accept').includes('image')) {
+						var copy = response.clone();
+						event.waitUntil(caches.open(imgID).then(function (cache) {
+							return cache.put(request, copy);
+						}));
+					}
 
-					// Return the response
+					// Return the requested file
 					return response;
 
 				});
@@ -88,4 +145,11 @@ self.addEventListener('fetch', function (event) {
 		);
 	}
 
+});
+
+// Trim caches over a certain size
+self.addEventListener('message', function (event) {
+	if (event.data !== 'cleanUp') return;
+	trimCache(pageID, limits.pages);
+	trimCache(imgID, limits.imgs);
 });
