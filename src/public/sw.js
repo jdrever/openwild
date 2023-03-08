@@ -115,7 +115,7 @@ self.addEventListener('fetch', function (event) {
 				return response;
 			}).catch(function (error) {
 				return caches.match(request).then(function (response) {
-					return response || caches.match('/offline/');
+					return response || caches.match('/offline.html');
 				});
 			})
 		);

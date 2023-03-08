@@ -40,4 +40,6 @@ Route::get('/radius/', [RadiusController::class, 'index']);
 Route::get('/radius/longitude/{longitude}/latitude/{latitude}/{refresh?}', [SpeciesController::class, 'listForRadius']);
 Route::view('/about', 'about');
 
+Route::view('/offline', 'offline');
+
 Route::get('/axiophytes', [SpeciesController::class, 'listAllAxiophytes']);
