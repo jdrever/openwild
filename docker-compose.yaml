@@ -1,14 +1,6 @@
 version: "3.8"
 
 services: 
-    db:
-        image: mysql:8.0
-        volumes: 
-            - db-data:/var/lib/mysql
-        environment:
-            - MYSQL_ROOT_PASSWORD=root
-            - MYSQL_DATABASE=question_board
-
     app:
         build: .
         entrypoint: /usr/local/bin/docker-php-entrypoint-dev
@@ -28,8 +20,3 @@ services:
         restart: unless-stopped
         ports: 
             - 8000:80
-        depends_on:
-            - db
-
-volumes:
-    db-data:
