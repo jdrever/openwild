@@ -73,5 +73,7 @@
             <a href="https://registry.nbnatlas.org/public/show/dp120" target="_blank">National Biodiversity Network</a>
     </div>
 </footer>
+
+<script src="/js/bootstrap.js"></script>
 </body>
 </html>
