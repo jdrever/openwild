@@ -3,6 +3,7 @@
 return [
     'siteId' => env('SITE_ID', 'Site ID Configured!'),
     'siteName' => env('SITE_NAME', 'Site Name Not Configured!'),
+    'siteOwner' => env('SITE_OWNER', 'Site Owner Not Configured!'),
     'dataResourceId' => env('DATA_RESOURCE_ID', false),
     'showAllData' => env('SHOW_ALL_DATA', false),
     'region' => env('REGION', false),

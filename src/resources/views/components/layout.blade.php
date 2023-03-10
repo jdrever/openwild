@@ -10,13 +10,12 @@
 	<!-- Bootstrap CSS -->
     <link rel="stylesheet" href="{{ asset('css/' . config('core.siteId') .'-style.css') }}">
 	<!-- Custom styles for this template -->
-	<link href="/css/enhancements.css" rel="stylesheet">
-	<!-- A2HS -->
 	<link rel="manifest" href="/manifest.webmanifest">
 	<!-- Mapping -->
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.css" integrity="sha256-BPfK9M5v34c2XP6p0cxVz1mUQLst0gTLk0mlc7kuodA=" crossorigin="anonymous">
-	<script src="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet-src.js" integrity="sha256-dG7rUAec0UN0e3nlMEuYJzsbK0rpoz4hBbNp0ir9iF8=" crossorigin="anonymous"></script>
-	<script src="https://cdn.jsdelivr.net/npm/wicket@1.3.6/wicket.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js" integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/wicket@1.3.6/wicket.min.js"></script>
 	<script type="text/javascript" src="/js/proj4.js"></script>
 	<script type="text/javascript" src="/js/Leaflet.MetricGrid.js"></script>
 	<script type="text/javascript" src="/js/leaflet.wms.js"></script>
@@ -58,25 +57,21 @@
 @include('components/header')
 
 @isset($results->errorMessage)
-<div class="alert alert-warning alert-dismissible fade show" role="alert">
+<div class="alert" role="alert">
     <?= $results->errorMessage ?>
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-    </button>
 </div>
 @endisset
 
-<div class="container-fluid content-inner p-3">
+<div class="main">
+    <main>
 {{ $slot }}
+    </main>
 </div>
 <footer class="page-footer footer-fluid">
-    <div class="mx-auto mt-2 text-center">
-        <span class="small">Supported by
+    <div>
+        {{ config('core.siteOwner') }} supported by
             <a href="https://registry.nbnatlas.org/public/show/dp120" target="_blank">National Biodiversity Network</a>
-        </span>
     </div>
 </footer>
-<!-- Bootstrap 5-beta2 bundle -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
 </body>
 </html>

@@ -1,38 +1,40 @@
 <header>
-    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="/">{{ config('core.siteName') }}</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
-                aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarCollapse">
-                <ul class="navbar-nav me-auto mb-2 mb-md-0">
-                    @if (config('core.axiophytesOnly'))
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="/axiophytes/">What are Axiophytes?</a>
-                        </li>
-                    @endif
-                    @if (config('core.showSpeciesSearch'))
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="/">Species</a>
-                        </li>
-                    @endif
-                    @if (config('core.showSitesSearch'))
-                        <li class="nav-item">
-                            <a class="nav-link" href="/sites/">Sites</a>
-                        </li>
-                    @endif
-                    @if (config('core.showSquaresSearch'))
-                        <li class="nav-item">
-                            <a class="nav-link" href="/squares/">Squares</a>
-                        </li>
-                    @endif
-                    <li class="nav-item">
-                        <a class="nav-link" href="/about">About</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
+    <div>
+        <a href="/" class="logo"><strong>{{ config('core.siteName') }}</strong></a>
+        <a href="#menu" id="menu-toggle" class="menu-toggle" aria-label="Open the menu">
+            <svg viewBox="0 0 100 80" width="40" height="40" aria-hidden="true">
+                <rect fill="white" width="100" height="15"></rect>
+                <rect fill="white" y="30" width="100" height="15"></rect>
+                <rect fill="white" y="60" width="100" height="15"></rect>
+            </svg>
+        </a>
+    </div>
+    <nav class="main">
+        <a id="menu" name="menu"></a>
+        <ul class="menu">
+            @if (config('core.axiophytesOnly'))
+            <li>
+                <a href="/axiophytes/">What are Axiophytes?</a>
+            </li>
+            @endif
+            @if (config('core.showSpeciesSearch'))
+            <li>
+                <a href="/">Species</a>
+            </li>
+            @endif
+            @if (config('core.showSitesSearch'))
+            <li>
+                <a href="/sites/">Sites</a>
+            </li>
+            @endif
+            @if (config('core.showSquaresSearch'))
+            <li>
+                <a href="/squares/">Squares</a>
+            </li>
+            @endif
+            <li>
+                <a href="/about">About</a>
+            </li>
+        </ul>
     </nav>
 </header>

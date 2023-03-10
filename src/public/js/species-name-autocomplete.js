@@ -1,9 +1,8 @@
 let speciesName=document.getElementById("speciesName");
 let speciesNameAutocomplete=document.getElementById("speciesNameAutocompleteList");
 
-speciesName.oninput = function ()
+speciesName.addEventListener('input', function (evt)
 {
-
     if (this.value.startsWith("Scientific Name:"))
     {
         document.getElementById('speciesNameTypeScientific').checked=true;
@@ -31,4 +30,4 @@ speciesName.oninput = function ()
         // There was an error
         console.warn('Something went wrong.', err);
     });
-  }}
+}});

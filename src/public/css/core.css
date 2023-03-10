@@ -1,0 +1,407 @@
+/* reset from Andy Bell */
+
+/* Box sizing rules */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+/* Remove default margin */
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+blockquote,
+dl,
+dd {
+    margin: 0;
+}
+
+/* Remove list styles on ul, ol elements with a list role, which suggests default styling will be removed */
+ul[role="list"],
+ol[role="list"] {
+    list-style: none;
+}
+
+/* Set core root defaults */
+html:focus-within {
+    scroll-behavior: smooth;
+}
+
+/* Set core body defaults */
+body {
+    min-height: 100vh;
+    text-rendering: optimizeSpeed;
+    line-height: 1.5;
+}
+
+/* A elements that don't have a class get default styles */
+a:not([class]) {
+    text-decoration-skip-ink: auto;
+}
+
+/* Make images easier to work with */
+img,
+picture {
+    max-width: 100%;
+    display: block;
+}
+
+/* Inherit fonts for inputs and buttons */
+input,
+button,
+textarea,
+select {
+    font: inherit;
+}
+
+/* Remove all animations, transitions and smooth scroll for people that prefer not to see them */
+@media (prefers-reduced-motion: reduce) {
+    html:focus-within {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/** styles */
+
+body {
+    font-family: var(--font-family);
+    background-color: var(--bg-body);
+    padding: var(--bg-padding);
+}
+
+header {
+    margin: 0em;
+    background-color: var(--bg-dark);
+    display: flex;
+    flex-direction: column;
+    color: var(--color-light);
+    gap: 2em;
+    padding: 1em;
+    font-size: 1.1em;
+}
+
+a.logo {
+    color: var(--color-light);
+    text-decoration: none;
+    font-family: var(--font-family-bold);
+    font-size: 1.2em;
+    text-shadow: 1px 2px 3px rgba(0, 0, 0, 0.2);
+}
+
+nav.main {
+    display: none;
+}
+
+nav.main a {
+    color: var(--color-light);
+    text-decoration: none;
+}
+
+nav.main a:hover,
+a.logo:hover {
+    text-decoration: underline;
+}
+
+.menu-toggle {
+    color: white;
+    margin: 1em;
+    cursor: pointer;
+}
+
+nav.breadcrumb {
+    margin: 0em;
+    background-color: var(--bg-light);
+}
+
+nav.breadcrumb ol {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0em;
+    padding: 0.5em;
+    list-style: none;
+}
+
+nav.breadcrumb li:after {
+    content: "›";
+    display: inline;
+    font-size: 1.2em;
+    color: darkgray;
+}
+
+ul.menu {
+    display: flex;
+    flex-direction: column;
+    margin: 0em;
+    padding: 0.5em 0.5em;
+    gap: 0.5em;
+    list-style: none;
+}
+
+div.main {
+    background-color: var(--bg-light);
+}
+
+main {
+    max-width: 900px;
+    margin-right: auto;
+    margin-left: auto;
+    padding: 0.5em;
+}
+
+h1,
+h2,
+h3 {
+    color: var(--color-dark);
+    margin-block-end: 0.75em;
+    font-family: var(--font-family-heading);
+}
+
+h2.search-title
+{
+    text-align: center;
+    margin:0em;
+    font-size:22px;
+}
+
+h1 img {
+    display: inline-block;
+}
+
+p {
+    margin-block-end: 0.5em;
+}
+
+div.lead {
+    font-size: 1.3em;
+    font-weight: 700;
+    background-color: var(--bg-light);
+    padding: 0.5em;
+    margin: 0.5em 0em;
+}
+
+em {
+    font-family: var(--font-family-italics);
+    font-weight: normal;
+    font-style: normal;
+}
+
+strong {
+    font-family: var(--font-family-bold);
+    font-weight: normal;
+    font-style: normal;
+}
+
+article {
+    padding: 1em;
+    margin: 1em;
+    background-color: var(--bg-light);
+}
+
+section {
+    border-bottom: 1px solid black;
+    padding-bottom: 1em;
+    margin: 1em 0em;
+}
+
+aside {
+    padding: 1em;
+    background-color: var(--bg-light);
+    border-radius: 2em;
+}
+
+figure {
+    display: flex;
+    flex-flow: row;
+    justify-content: flex-start;
+    margin: 2em;
+}
+
+figure img {
+    width: 30vw;
+}
+
+figcaption {
+    align-self: flex-end;
+    border-left: 1em solid rgb(169, 13, 94);
+    padding-left: 1em;
+    margin-left: 2em;
+    width: 25vw;
+}
+
+section.case-study p.technical {
+    font-size: 0.9em;
+    font-style: italic;
+}
+
+section.case-study figure {
+    display: flex;
+    justify-content: center;
+}
+
+section.case-study figcaption {
+    display: block;
+    width: 100%;
+    text-align: center;
+}
+
+button
+{
+    cursor:pointer;
+}
+
+
+div.search-selections
+{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content: center;
+    gap:4em;
+}
+
+
+footer {
+    padding: 0.5em;
+}
+
+footer div {
+    max-width: 900px;
+    margin-right: auto;
+    margin-left: auto;
+    padding: 0.5em;
+}
+
+footer p {
+    font-size: 1em;
+}
+
+/** utlity classes */
+
+.text-centre {
+    text-align: center;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75em;
+}
+
+.container > * {
+    flex: 1;
+}
+
+.card-group {
+    display: flex;
+    flex-direction: column;
+}
+.card-container {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 10px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.card-content {
+    margin-bottom: 10px;
+}
+
+.card-container p {
+    font-size: 1em;
+}
+
+.btn,
+.card-button {
+    background-color: var(--bg-primary);
+    color: var(--color-light);
+    border-radius: 0.375rem;
+    text-decoration: none;
+}
+
+.card-button {
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    width: 100%;
+    margin-top: auto;
+    text-align: center;
+}
+
+.card-button:hover,
+.btn:hover {
+    background-color: var(--bg-dark);
+}
+
+.mb-05 {
+    margin-bottom: 2em;
+}
+
+.topyenoh {
+    position: absolute;
+    left: -9999px;
+}
+
+
+@media (min-width: 914px) {
+    p {
+        font-size: 1.4em;
+    }
+
+    h1 {
+        font-size: 2.8em;
+    }
+
+    h2 {
+        font-size: 2em;
+    }
+
+    ul {
+        font-size: 1.3em;
+    }
+
+    ul.menu {
+        font-size: 1em;
+    }
+
+    nav.main {
+        display: flex;
+        gap: 1em;
+    }
+
+    ul.menu {
+        flex-direction: row;
+    }
+
+    .menu-toggle {
+        display: none;
+    }
+
+    header {
+        flex-direction: row;
+    }
+    .container {
+        flex-direction: row;
+    }
+    .card-group {
+        flex-wrap: wrap;
+        align-items: stretch;
+        flex-direction: row;
+    }
+}

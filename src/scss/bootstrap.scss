@@ -1,0 +1,27 @@
+$dark: green;
+$primary: darkgreen;
+
+// Configuration
+@import "../node_modules/bootstrap/scss/_functions.scss";
+@import "../node_modules/bootstrap/scss/_variables";
+@import "../node_modules/bootstrap/scss/_maps";
+@import "../node_modules/bootstrap/scss/_mixins";
+@import "../node_modules/bootstrap/scss/_utilities";
+
+// Layout & components
+@import "../node_modules/bootstrap/scss/_root";
+@import "../node_modules/bootstrap/scss/_tables";
+@import "../node_modules/bootstrap/scss/_forms";
+@import "../node_modules/bootstrap/scss/_buttons";
+@import "../node_modules/bootstrap/scss/_button-group";
+@import "../node_modules/bootstrap/scss/_nav";
+@import "../node_modules/bootstrap/scss/_pagination";
+@import "../node_modules/bootstrap/scss/_alert";
+@import "../node_modules/bootstrap/scss/_list-group";
+
+// Helpers
+@import "../node_modules/bootstrap/scss/_helpers";
+
+// Utilities
+@import "../node_modules/bootstrap/scss/_utilities";
+
