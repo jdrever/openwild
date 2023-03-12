@@ -1,2 +1,30 @@
-<p>You are offline and don't have access to this information!</p>
+<h1>You're Offline</h1>
+<p>It looks like you’re not online right now. Don’t worry! You can still access some of the pages you looked at before going offline.</p>
+<div id="offline-content"></div>
+<script>
+if (navigator && navigator.serviceWorker) {
+	caches.open('ow_pages').then(function (cache) {
+		cache.keys().then(function (keys) {
 
+			// Get the HTML element
+			let offline = document.querySelector('#offline-content');
+
+			// Inject a list of URLs into the DOM
+			offline.innerHTML =
+				`<ul>
+					${keys.map(function(key) {
+
+						// If the item isn't an HTML file, skip to the next one
+						// This is only needed if you're keeping everything in one cache
+						if (!key.headers.get('Accept').includes('text/html') || key.url.includes('/offline')) return '';
+
+						// Otherwise, create a list item with a link to the page
+						return `<li><a href="${key.url}">${key.url}</a></li>`;
+
+					}).join('')}
+				</ul>`;
+
+		});
+	});
+}
+</script>

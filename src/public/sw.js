@@ -1,6 +1,6 @@
 /*! based on GMT Service Worker v2.8.0 | (c) 2022 Chris Ferdinandi | MIT License | http://github.com/cferdinandi/gmt-theme */
 
-var version = 'ow_0.0.1';
+var version = 'ow';
 // Cache IDs
 var coreID = version + '_core';
 var pageID = version + '_pages';
