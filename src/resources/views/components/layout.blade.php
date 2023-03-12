@@ -9,6 +9,7 @@
 	<meta content="Promoting the enjoyment, understanding and conservation of the flora of Shropshire" name="description" />
 	<!-- Core CSS -->
     <link rel="stylesheet" href="{{ asset('css/' . config('core.siteId') .'-style.css') }}">
+    <script src="/js/bootstrap.js"></script>
 	<!-- Custom styles for this template -->
 	<link rel="manifest" href="/manifest.webmanifest">
 	<!-- Mapping -->
@@ -72,7 +73,5 @@
     </div>
 </footer>
 </div>
-<script src="/js/bootstrap.js"></script>
-
 </body>
 </html>
