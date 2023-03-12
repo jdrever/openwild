@@ -7,19 +7,14 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta content="Promoting the enjoyment, understanding and conservation of the flora of Shropshire" name="description" />
-	<!-- Bootstrap CSS -->
+	<!-- Core CSS -->
     <link rel="stylesheet" href="{{ asset('css/' . config('core.siteId') .'-style.css') }}">
 	<!-- Custom styles for this template -->
 	<link rel="manifest" href="/manifest.webmanifest">
 	<!-- Mapping -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
-    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js" integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
+    <link rel="stylesheet" href="/css/leaflet.css">
+    <script src="/js/mapping.js"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/wicket@1.3.6/wicket.min.js"></script>
-	<script type="text/javascript" src="/js/proj4.js"></script>
-	<script type="text/javascript" src="/js/Leaflet.MetricGrid.js"></script>
-	<script type="text/javascript" src="/js/leaflet.wms.js"></script>
-	<script type="text/javascript" src="/js/BasicMap.js"></script>
 	<script>
 		if (navigator && navigator.serviceWorker)
 		{
@@ -54,26 +49,30 @@
 </head>
 
 <body>
+<div class="container-fluid p-2 pt-0 mt-2">
 @include('components/header')
 
 @isset($results->errorMessage)
-<div class="alert" role="alert">
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
     <?= $results->errorMessage ?>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
 </div>
 @endisset
 
-<div class="main">
-    <main>
+<div class="container-fluid content-inner p-3">
 {{ $slot }}
-    </main>
 </div>
 <footer class="page-footer footer-fluid">
-    <div>
-        {{ config('core.siteOwner') }} supported by
+    <div class="mx-auto mt-2 text-center">
+        <span class="small">Supported by
             <a href="https://registry.nbnatlas.org/public/show/dp120" target="_blank">National Biodiversity Network</a>
+        </span>
     </div>
 </footer>
-
+</div>
 <script src="/js/bootstrap.js"></script>
+
 </body>
 </html>

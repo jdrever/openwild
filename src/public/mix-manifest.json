@@ -1,5 +1,12 @@
 {
-    "/js/app.js": "/js/app.js",
+    "/css/leaflet.css": "/css/leaflet.css",
+    "/css/bootstrap.css": "/css/bootstrap.css",
     "/js/bootstrap.js": "/js/bootstrap.js",
-    "/css/bootstrap.css": "/css/bootstrap.css"
+    "/js/site-name-autocomplete.js": "/js/site-name-autocomplete.js",
+    "/js/species-name-autocomplete.js": "/js/species-name-autocomplete.js",
+    "/js/update-dataset.js": "/js/update-dataset.js",
+    "/js/mapping.js": "/js/mapping.js",
+    "/css/app.css": "/css/app.css",
+    "/css/shropshire-style.css": "/css/shropshire-style.css",
+    "/css/enhancements.css": "/css/enhancements.css"
 }

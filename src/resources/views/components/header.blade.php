@@ -1,40 +1,35 @@
-<header>
-    <div>
-        <a href="/" class="logo"><strong>{{ config('core.siteName') }}</strong></a>
-        <a href="#menu" id="menu-toggle" class="menu-toggle" aria-label="Open the menu">
-            <svg viewBox="0 0 100 80" width="40" height="40" aria-hidden="true">
-                <rect fill="white" width="100" height="15"></rect>
-                <rect fill="white" y="30" width="100" height="15"></rect>
-                <rect fill="white" y="60" width="100" height="15"></rect>
-            </svg>
-        </a>
-    </div>
-    <nav class="main">
-        <a id="menu" name="menu"></a>
-        <ul class="menu">
+<nav class="navbar navbar-expand-sm navbar-light px-3 py-2">
+    <a class="navbar-brand fs-4" href="/">Botanical Records</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-main"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="navbar-collapse collapse flex-grow-1 text-right text-white" id="navbar-main">
+        <ul class="navbar-nav me-auto mb-2 mb-md-0">
             @if (config('core.axiophytesOnly'))
-            <li>
-                <a href="/axiophytes/">What are Axiophytes?</a>
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="/axiophytes/">What are Axiophytes?</a>
             </li>
             @endif
             @if (config('core.showSpeciesSearch'))
-            <li>
-                <a href="/">Species</a>
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="/">Species</a>
             </li>
             @endif
             @if (config('core.showSitesSearch'))
-            <li>
-                <a href="/sites/">Sites</a>
+            <li class="nav-item">
+                <a class="nav-link" href="/sites/">Sites</a>
             </li>
             @endif
             @if (config('core.showSquaresSearch'))
-            <li>
-                <a href="/squares/">Squares</a>
+            <li class="nav-item">
+                <a class="nav-link" href="/squares/">Squares</a>
             </li>
             @endif
-            <li>
-                <a href="/about">About</a>
+            <li class="nav-item">
+                <a class="nav-link" href="/about">About</a>
             </li>
         </ul>
-    </nav>
-</header>
+    </div>
+    </div>
+</nav>

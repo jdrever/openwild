@@ -1,4 +1,4 @@
-<div class="search-selections">
+<div class="row justify-content-center gy-3">
 	<div class="form-group col-sm-4 col-lg-3">
 		<div class="form-check">
 			<input class="form-check-input" type="radio" name="speciesNameType" id="speciesNameTypeScientific" value="scientific"  data-refresh="true" {{ ($speciesNameType=="scientific")? "checked" : "" }} />

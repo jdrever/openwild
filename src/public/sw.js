@@ -14,13 +14,11 @@ var limits = {
 	imgs: 20
 };
 
-let coreAssets = [ '/offline.html',  'favicon.ico', '/css/shropshire-style.css','/js/Leaflet.MetricGrid.js',
-    //leaflet
-    'https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet-src.js', 'https://unpkg.com/leaflet@1.9.3/dist/leaflet.css',
-    ,'https://cdn.jsdelivr.net/npm/wicket@1.3.6/wicket.min.js', '/js/proj4.js', '/js/leaflet.wms.js', '/js/BasicMap.js', '/js/update-dataset.js',
-    '/js/bootsrap.js',
-    '/js/Leaflet.MetricGrid.js', '/js/species-name-autocomplete.js', '/manifest.webmanifest', '/css/enhancements.css', 'https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.css'
-    , 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js', 'https://unpkg.com/brc-atlas-bigr/dist/bigr.min.umd.js', 'https://d3js.org/d3.v5.min.js' ];
+let coreAssets = [ '/offline.html',  '/manifest.webmanifest', 'favicon.ico',
+    '/css/shropshire-style.css','/js/bootstrap.js',
+    'js/mapping.js', 'css/leaflet.css', '/js/update-dataset.js',
+    , '/js/species-name-autocomplete.js', , '/css/enhancements.css',
+    , 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js', , 'https://d3js.org/d3.v5.min.js' ];
 
 
 //
