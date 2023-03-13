@@ -1,5 +1,7 @@
 @isset($results->records)
-@foreach ($results->records as $record)
+@forelse ($results->records as $record)
     <option value="{{$record}}">
-@endforeach
+@empty
+    <option value="" readonly>No records match "{{$query}}"</option>
+@endforelse
 @endisset

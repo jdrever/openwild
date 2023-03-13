@@ -209,6 +209,7 @@ class SpeciesController extends Controller
         return view('partials/search-autocomplete',
         [
             'results' =>$results,
+            'query'=>$speciesName
         ]);
     }
 }

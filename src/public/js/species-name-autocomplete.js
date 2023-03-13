@@ -25,7 +25,7 @@ speciesName.addEventListener('input', function (evt)
             // The API call was successful!
             return response.text();
         }).then(function (html) {
-        speciesNameAutocomplete.innerHTML =html;
+            speciesNameAutocomplete.innerHTML = html;
     }).catch(function (err) {
         // There was an error
         console.warn('Something went wrong.', err);

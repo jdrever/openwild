@@ -6,7 +6,7 @@
 <form action="/" action="post">
 @csrf
 <div class="row mb-2">
-	<div class="col-lg-8 mx-auto">
+	<div id="autocomplete-container" class="col-lg-8 mx-auto">
 		<label for="search" class="form-label visually-hidden">Species name</label>
 		<div class="input-group">
             <input type="text" id="speciesName" class="form-control" name="speciesName" aria-describedby="search-help" placeholder="Species name" value="{{ $speciesName }}" list="speciesNameAutocompleteList" autocomplete="off"/>
