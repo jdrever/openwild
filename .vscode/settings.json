@@ -1,10 +1,6 @@
 {
     "favorites.resources": [
         {
-            "filePath": "src/public/css",
-            "group": "Default"
-        },
-        {
             "filePath": "src/resources/views",
             "group": "Default"
         },
@@ -13,7 +9,7 @@
             "group": "Default"
         },
         {
-            "filePath": "src/public/js",
+            "filePath": "src/resources/js",
             "group": "Default"
         }
     ]

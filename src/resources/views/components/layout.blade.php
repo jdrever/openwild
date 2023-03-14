@@ -9,12 +9,16 @@
 	<meta content="Promoting the enjoyment, understanding and conservation of the flora of Shropshire" name="description" />
 	<!-- Core CSS -->
     <link rel="stylesheet" href="{{ asset('css/' . config('core.siteId') .'-style.css') }}">
-    <script src="/js/bootstrap.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
 	<!-- Custom styles for this template -->
 	<link rel="manifest" href="/manifest.webmanifest">
 	<!-- Mapping -->
-    <link rel="stylesheet" href="/css/leaflet.css">
-    <script src="/js/mapping.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js" integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
+	<script type="text/javascript" src="/js/proj4.js"></script>
+	<script type="text/javascript" src="/js/Leaflet.MetricGrid.js"></script>
+	<script type="text/javascript" src="/js/leaflet.wms.js"></script>
+	<script type="text/javascript" src="/js/BasicMap.js"></script>
 
 	<script>
 		if (navigator && navigator.serviceWorker)

@@ -15,10 +15,13 @@ var limits = {
 };
 
 let coreAssets = [ '/offline.html',  '/manifest.webmanifest', 'favicon.ico',
-    '/css/shropshire-style.css','/js/bootstrap.js',
+    '/css/shropshire-style.css',
+    'https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js',
+    'https://unpkg.com/leaflet@1.9.3/dist/leaflet.css',
+    'https://unpkg.com/leaflet@1.9.3/dist/leaflet.js',
     'js/mapping.js', 'css/leaflet.css', '/js/update-dataset.js',
-    , '/js/species-name-autocomplete.js', , '/css/enhancements.css',
-    , 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js', , 'https://d3js.org/d3.v5.min.js' ];
+    , '/js/species-name-autocomplete.js', '/css/enhancements.css',
+    , 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js', 'https://d3js.org/d3.v5.min.js' ];
 
 
 //
