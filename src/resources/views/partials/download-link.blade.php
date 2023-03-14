@@ -1,3 +1,3 @@
 <?php if (isset($results->downloadLink)) : ?>
-	<a href="{{ $results->downloadLink }}" class="btn">Download this data</a>
+	<a href="{{ $results->downloadLink }}" class="btn btn-light btn-sm">Download this data</a>
 <?php endif ?>
