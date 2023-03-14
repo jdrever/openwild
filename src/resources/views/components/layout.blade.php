@@ -18,7 +18,6 @@
     <script src="https://cdn.jsdelivr.net/npm/wicket@1.3.6/wicket.min.js"></script>
 	<script type="text/javascript" src="/js/proj4.js"></script>
 	<script type="text/javascript" src="/js/Leaflet.MetricGrid.js"></script>
-	<script type="text/javascript" src="/js/leaflet.wms.js"></script>
 	<script type="text/javascript" src="/js/BasicMap.js"></script>
 
 	<script>
