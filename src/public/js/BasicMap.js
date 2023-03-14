@@ -70,7 +70,7 @@ function initialiseBasicMap(region, fitToRegion = true, handleResize = true, map
 		["load", "resize"].forEach((event) => {
 			window.addEventListener(event, () => {
 				const activeTab = document.querySelector("[aria-selected='true']");
-				new bootstrap.Tab(activeTab).show();
+				activeTab.classList.add("show");
 
 				if (window.matchMedia("(min-width: 992px)").matches) {
 					document.querySelector("#tab-content").classList.remove("tab-content");
@@ -78,7 +78,7 @@ function initialiseBasicMap(region, fitToRegion = true, handleResize = true, map
 					document.querySelector("#data").classList.add("show");
 				} else {
 					document.querySelector("#tab-content").classList.add("tab-content");
-					bootstrap.Tab.getInstance(activeTab).show();
+					activeTab.classList.add("show");
 				}
 			});
 		});

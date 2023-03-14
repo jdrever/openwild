@@ -16,7 +16,7 @@ var limits = {
 
 let coreAssets = [ '/offline.html',  '/manifest.webmanifest', 'favicon.ico',
     '/css/shropshire-style.css',
-    'https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js',
+    'js/bootstrap.js',
     'https://unpkg.com/leaflet@1.9.3/dist/leaflet.css',
     'https://unpkg.com/leaflet@1.9.3/dist/leaflet.js',
     'js/mapping.js', 'css/leaflet.css', '/js/update-dataset.js',

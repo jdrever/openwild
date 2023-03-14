@@ -1,4 +1,6 @@
 {
+    "/js/app.js": "/js/app.js",
+    "/js/bootstrap.js": "/js/bootstrap.js",
     "/css/leaflet.css": "/css/leaflet.css",
     "/css/bootstrap.css": "/css/bootstrap.css",
     "/js/site-name-autocomplete.js": "/js/site-name-autocomplete.js",
