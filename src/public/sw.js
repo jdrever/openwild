@@ -15,10 +15,14 @@ var limits = {
 };
 
 let coreAssets = [ '/offline.html',  '/manifest.webmanifest', 'favicon.ico',
-    '/css/shropshire-style.css','/js/bootstrap.js',
-    'js/mapping.js', 'css/leaflet.css', '/js/update-dataset.js',
-    , '/js/species-name-autocomplete.js', , '/css/enhancements.css',
-    , 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js', , 'https://d3js.org/d3.v5.min.js' ];
+    '/css/shropshire-style.css',
+    'js/bootstrap.js',
+    'https://unpkg.com/leaflet@1.9.3/dist/leaflet.css',
+    'https://unpkg.com/leaflet@1.9.3/dist/leaflet.js',
+    'css/leaflet.css', '/js/update-dataset.js',
+    , '/js/species-name-autocomplete.js', '/css/enhancements.css',
+    , 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js', 'https://d3js.org/d3.v5.min.js',
+    'https://cdn.jsdelivr.net/npm/wicket@1.3.6/wicket.min.js' ];
 
 
 //

@@ -13,8 +13,12 @@
 	<!-- Custom styles for this template -->
 	<link rel="manifest" href="/manifest.webmanifest">
 	<!-- Mapping -->
-    <link rel="stylesheet" href="/css/leaflet.css">
-    <script src="/js/mapping.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js" integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
+    <script src="https://cdn.jsdelivr.net/npm/wicket@1.3.6/wicket.min.js"></script>
+	<script type="text/javascript" src="/js/proj4.js"></script>
+	<script type="text/javascript" src="/js/Leaflet.MetricGrid.js"></script>
+	<script type="text/javascript" src="/js/BasicMap.js"></script>
 
 	<script>
 		if (navigator && navigator.serviceWorker)

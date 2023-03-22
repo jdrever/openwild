@@ -142,7 +142,7 @@
 	@isset($results->gridReferenceWKT)
 		<script>
 			// Basic map code (in BasicMap.js) - not fitting to Shropshire
-			const map = initialiseBasicMap(fitToShropshire = false);
+			const map = initialiseBasicMap(region='{{ config('core.region') }}', fitToRegion= false);
 
 			// Initialise geoJson boundary layer for wkt polygon
 			const wktBoundary = L.geoJSON(null, {
