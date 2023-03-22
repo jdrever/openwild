@@ -28,7 +28,7 @@ interface QueryService
 
     public function getAllAxiophytes(string $speciesNameType, int $currentPage);
 
-    public function getSpeciesNameAutocomplete(string $speciesName): AutocompleteResult;
+    public function getSpeciesNameAutocomplete(string $speciesName, string $speciesNameType, string $speciesGroup): AutocompleteResult;
 
     public function getSiteNameAutocomplete(string $siteName): AutocompleteResult;
 }

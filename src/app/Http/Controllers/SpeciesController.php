@@ -202,14 +202,15 @@ class SpeciesController extends Controller
         ]);
     }
 
-    public function getSpeciesNameAutoComplete($speciesName)
+    public function getSpeciesNameAutoComplete($speciesName, $nameType, $speciesGroup)
     {
-        $results = $this->queryService->getSpeciesNameAutoComplete($speciesName);
+        $results = $this->queryService->getSpeciesNameAutoComplete($speciesName, $nameType, $speciesGroup);
 
         return view('partials/search-autocomplete',
         [
-            'results' =>$results,
-            'query'=>$speciesName
+            'results' => $results,
+            'nameType' => $nameType,
+            'speciesName'=>$speciesName
         ]);
     }
 }

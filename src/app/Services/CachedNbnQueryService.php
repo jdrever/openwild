@@ -167,15 +167,15 @@ class CachedNbnQueryService implements QueryService
         return $queryResult;
     }
 
-    public function getSpeciesNameAutocomplete(string $speciesName): AutocompleteResult
+    public function getSpeciesNameAutocomplete(string $speciesName, string $speciesNameType, string $speciesGroup): AutocompleteResult
     {
-        $cacheKey = 'getSpeciesNameAutocomplete:'.$speciesName;
+        $cacheKey = 'getSpeciesNameAutocomplete:'.$speciesName.'-'.$speciesNameType.'-'.$speciesGroup;
         if (config('core.caching') && Cache::has($cacheKey)) {
             return Cache::get($cacheKey);
         }
 
         $nbnQueryService = new NbnQueryService();
-        $queryResult = $nbnQueryService->getSpeciesNameAutocomplete($speciesName);
+        $queryResult = $nbnQueryService->getSpeciesNameAutocomplete($speciesName, $speciesNameType, $speciesGroup);
 
         Cache::put($cacheKey, $queryResult);
 
