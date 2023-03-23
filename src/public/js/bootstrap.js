@@ -105,6 +105,320 @@ class BaseComponent extends _util_config__WEBPACK_IMPORTED_MODULE_3__["default"]
 
 /***/ }),
 
+/***/ "./node_modules/bootstrap/js/src/collapse.js":
+/*!***************************************************!*\
+  !*** ./node_modules/bootstrap/js/src/collapse.js ***!
+  \***************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _util_index__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./util/index */ "./node_modules/bootstrap/js/src/util/index.js");
+/* harmony import */ var _dom_event_handler__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./dom/event-handler */ "./node_modules/bootstrap/js/src/dom/event-handler.js");
+/* harmony import */ var _dom_selector_engine__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./dom/selector-engine */ "./node_modules/bootstrap/js/src/dom/selector-engine.js");
+/* harmony import */ var _base_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./base-component */ "./node_modules/bootstrap/js/src/base-component.js");
+/**
+ * --------------------------------------------------------------------------
+ * Bootstrap (v5.2.3): collapse.js
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+ * --------------------------------------------------------------------------
+ */
+
+
+
+
+
+
+/**
+ * Constants
+ */
+
+const NAME = 'collapse'
+const DATA_KEY = 'bs.collapse'
+const EVENT_KEY = `.${DATA_KEY}`
+const DATA_API_KEY = '.data-api'
+
+const EVENT_SHOW = `show${EVENT_KEY}`
+const EVENT_SHOWN = `shown${EVENT_KEY}`
+const EVENT_HIDE = `hide${EVENT_KEY}`
+const EVENT_HIDDEN = `hidden${EVENT_KEY}`
+const EVENT_CLICK_DATA_API = `click${EVENT_KEY}${DATA_API_KEY}`
+
+const CLASS_NAME_SHOW = 'show'
+const CLASS_NAME_COLLAPSE = 'collapse'
+const CLASS_NAME_COLLAPSING = 'collapsing'
+const CLASS_NAME_COLLAPSED = 'collapsed'
+const CLASS_NAME_DEEPER_CHILDREN = `:scope .${CLASS_NAME_COLLAPSE} .${CLASS_NAME_COLLAPSE}`
+const CLASS_NAME_HORIZONTAL = 'collapse-horizontal'
+
+const WIDTH = 'width'
+const HEIGHT = 'height'
+
+const SELECTOR_ACTIVES = '.collapse.show, .collapse.collapsing'
+const SELECTOR_DATA_TOGGLE = '[data-bs-toggle="collapse"]'
+
+const Default = {
+  parent: null,
+  toggle: true
+}
+
+const DefaultType = {
+  parent: '(null|element)',
+  toggle: 'boolean'
+}
+
+/**
+ * Class definition
+ */
+
+class Collapse extends _base_component__WEBPACK_IMPORTED_MODULE_3__["default"] {
+  constructor(element, config) {
+    super(element, config)
+
+    this._isTransitioning = false
+    this._triggerArray = []
+
+    const toggleList = _dom_selector_engine__WEBPACK_IMPORTED_MODULE_2__["default"].find(SELECTOR_DATA_TOGGLE)
+
+    for (const elem of toggleList) {
+      const selector = (0,_util_index__WEBPACK_IMPORTED_MODULE_0__.getSelectorFromElement)(elem)
+      const filterElement = _dom_selector_engine__WEBPACK_IMPORTED_MODULE_2__["default"].find(selector)
+        .filter(foundElement => foundElement === this._element)
+
+      if (selector !== null && filterElement.length) {
+        this._triggerArray.push(elem)
+      }
+    }
+
+    this._initializeChildren()
+
+    if (!this._config.parent) {
+      this._addAriaAndCollapsedClass(this._triggerArray, this._isShown())
+    }
+
+    if (this._config.toggle) {
+      this.toggle()
+    }
+  }
+
+  // Getters
+  static get Default() {
+    return Default
+  }
+
+  static get DefaultType() {
+    return DefaultType
+  }
+
+  static get NAME() {
+    return NAME
+  }
+
+  // Public
+  toggle() {
+    if (this._isShown()) {
+      this.hide()
+    } else {
+      this.show()
+    }
+  }
+
+  show() {
+    if (this._isTransitioning || this._isShown()) {
+      return
+    }
+
+    let activeChildren = []
+
+    // find active children
+    if (this._config.parent) {
+      activeChildren = this._getFirstLevelChildren(SELECTOR_ACTIVES)
+        .filter(element => element !== this._element)
+        .map(element => Collapse.getOrCreateInstance(element, { toggle: false }))
+    }
+
+    if (activeChildren.length && activeChildren[0]._isTransitioning) {
+      return
+    }
+
+    const startEvent = _dom_event_handler__WEBPACK_IMPORTED_MODULE_1__["default"].trigger(this._element, EVENT_SHOW)
+    if (startEvent.defaultPrevented) {
+      return
+    }
+
+    for (const activeInstance of activeChildren) {
+      activeInstance.hide()
+    }
+
+    const dimension = this._getDimension()
+
+    this._element.classList.remove(CLASS_NAME_COLLAPSE)
+    this._element.classList.add(CLASS_NAME_COLLAPSING)
+
+    this._element.style[dimension] = 0
+
+    this._addAriaAndCollapsedClass(this._triggerArray, true)
+    this._isTransitioning = true
+
+    const complete = () => {
+      this._isTransitioning = false
+
+      this._element.classList.remove(CLASS_NAME_COLLAPSING)
+      this._element.classList.add(CLASS_NAME_COLLAPSE, CLASS_NAME_SHOW)
+
+      this._element.style[dimension] = ''
+
+      _dom_event_handler__WEBPACK_IMPORTED_MODULE_1__["default"].trigger(this._element, EVENT_SHOWN)
+    }
+
+    const capitalizedDimension = dimension[0].toUpperCase() + dimension.slice(1)
+    const scrollSize = `scroll${capitalizedDimension}`
+
+    this._queueCallback(complete, this._element, true)
+    this._element.style[dimension] = `${this._element[scrollSize]}px`
+  }
+
+  hide() {
+    if (this._isTransitioning || !this._isShown()) {
+      return
+    }
+
+    const startEvent = _dom_event_handler__WEBPACK_IMPORTED_MODULE_1__["default"].trigger(this._element, EVENT_HIDE)
+    if (startEvent.defaultPrevented) {
+      return
+    }
+
+    const dimension = this._getDimension()
+
+    this._element.style[dimension] = `${this._element.getBoundingClientRect()[dimension]}px`
+
+    ;(0,_util_index__WEBPACK_IMPORTED_MODULE_0__.reflow)(this._element)
+
+    this._element.classList.add(CLASS_NAME_COLLAPSING)
+    this._element.classList.remove(CLASS_NAME_COLLAPSE, CLASS_NAME_SHOW)
+
+    for (const trigger of this._triggerArray) {
+      const element = (0,_util_index__WEBPACK_IMPORTED_MODULE_0__.getElementFromSelector)(trigger)
+
+      if (element && !this._isShown(element)) {
+        this._addAriaAndCollapsedClass([trigger], false)
+      }
+    }
+
+    this._isTransitioning = true
+
+    const complete = () => {
+      this._isTransitioning = false
+      this._element.classList.remove(CLASS_NAME_COLLAPSING)
+      this._element.classList.add(CLASS_NAME_COLLAPSE)
+      _dom_event_handler__WEBPACK_IMPORTED_MODULE_1__["default"].trigger(this._element, EVENT_HIDDEN)
+    }
+
+    this._element.style[dimension] = ''
+
+    this._queueCallback(complete, this._element, true)
+  }
+
+  _isShown(element = this._element) {
+    return element.classList.contains(CLASS_NAME_SHOW)
+  }
+
+  // Private
+  _configAfterMerge(config) {
+    config.toggle = Boolean(config.toggle) // Coerce string values
+    config.parent = (0,_util_index__WEBPACK_IMPORTED_MODULE_0__.getElement)(config.parent)
+    return config
+  }
+
+  _getDimension() {
+    return this._element.classList.contains(CLASS_NAME_HORIZONTAL) ? WIDTH : HEIGHT
+  }
+
+  _initializeChildren() {
+    if (!this._config.parent) {
+      return
+    }
+
+    const children = this._getFirstLevelChildren(SELECTOR_DATA_TOGGLE)
+
+    for (const element of children) {
+      const selected = (0,_util_index__WEBPACK_IMPORTED_MODULE_0__.getElementFromSelector)(element)
+
+      if (selected) {
+        this._addAriaAndCollapsedClass([element], this._isShown(selected))
+      }
+    }
+  }
+
+  _getFirstLevelChildren(selector) {
+    const children = _dom_selector_engine__WEBPACK_IMPORTED_MODULE_2__["default"].find(CLASS_NAME_DEEPER_CHILDREN, this._config.parent)
+    // remove children if greater depth
+    return _dom_selector_engine__WEBPACK_IMPORTED_MODULE_2__["default"].find(selector, this._config.parent).filter(element => !children.includes(element))
+  }
+
+  _addAriaAndCollapsedClass(triggerArray, isOpen) {
+    if (!triggerArray.length) {
+      return
+    }
+
+    for (const element of triggerArray) {
+      element.classList.toggle(CLASS_NAME_COLLAPSED, !isOpen)
+      element.setAttribute('aria-expanded', isOpen)
+    }
+  }
+
+  // Static
+  static jQueryInterface(config) {
+    const _config = {}
+    if (typeof config === 'string' && /show|hide/.test(config)) {
+      _config.toggle = false
+    }
+
+    return this.each(function () {
+      const data = Collapse.getOrCreateInstance(this, _config)
+
+      if (typeof config === 'string') {
+        if (typeof data[config] === 'undefined') {
+          throw new TypeError(`No method named "${config}"`)
+        }
+
+        data[config]()
+      }
+    })
+  }
+}
+
+/**
+ * Data API implementation
+ */
+
+_dom_event_handler__WEBPACK_IMPORTED_MODULE_1__["default"].on(document, EVENT_CLICK_DATA_API, SELECTOR_DATA_TOGGLE, function (event) {
+  // preventDefault only for <a> elements (which change the URL) not inside the collapsible element
+  if (event.target.tagName === 'A' || (event.delegateTarget && event.delegateTarget.tagName === 'A')) {
+    event.preventDefault()
+  }
+
+  const selector = (0,_util_index__WEBPACK_IMPORTED_MODULE_0__.getSelectorFromElement)(this)
+  const selectorElements = _dom_selector_engine__WEBPACK_IMPORTED_MODULE_2__["default"].find(selector)
+
+  for (const element of selectorElements) {
+    Collapse.getOrCreateInstance(element, { toggle: false }).toggle()
+  }
+})
+
+/**
+ * jQuery
+ */
+
+;(0,_util_index__WEBPACK_IMPORTED_MODULE_0__.defineJQueryPlugin)(Collapse)
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Collapse);
+
+
+/***/ }),
+
 /***/ "./node_modules/bootstrap/js/src/dom/data.js":
 /*!***************************************************!*\
   !*** ./node_modules/bootstrap/js/src/dom/data.js ***!
@@ -692,6 +1006,329 @@ const SelectorEngine = {
 
 /***/ }),
 
+/***/ "./node_modules/bootstrap/js/src/tab.js":
+/*!**********************************************!*\
+  !*** ./node_modules/bootstrap/js/src/tab.js ***!
+  \**********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _util_index__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./util/index */ "./node_modules/bootstrap/js/src/util/index.js");
+/* harmony import */ var _dom_event_handler__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./dom/event-handler */ "./node_modules/bootstrap/js/src/dom/event-handler.js");
+/* harmony import */ var _dom_selector_engine__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./dom/selector-engine */ "./node_modules/bootstrap/js/src/dom/selector-engine.js");
+/* harmony import */ var _base_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./base-component */ "./node_modules/bootstrap/js/src/base-component.js");
+/**
+ * --------------------------------------------------------------------------
+ * Bootstrap (v5.2.3): tab.js
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+ * --------------------------------------------------------------------------
+ */
+
+
+
+
+
+
+/**
+ * Constants
+ */
+
+const NAME = 'tab'
+const DATA_KEY = 'bs.tab'
+const EVENT_KEY = `.${DATA_KEY}`
+
+const EVENT_HIDE = `hide${EVENT_KEY}`
+const EVENT_HIDDEN = `hidden${EVENT_KEY}`
+const EVENT_SHOW = `show${EVENT_KEY}`
+const EVENT_SHOWN = `shown${EVENT_KEY}`
+const EVENT_CLICK_DATA_API = `click${EVENT_KEY}`
+const EVENT_KEYDOWN = `keydown${EVENT_KEY}`
+const EVENT_LOAD_DATA_API = `load${EVENT_KEY}`
+
+const ARROW_LEFT_KEY = 'ArrowLeft'
+const ARROW_RIGHT_KEY = 'ArrowRight'
+const ARROW_UP_KEY = 'ArrowUp'
+const ARROW_DOWN_KEY = 'ArrowDown'
+
+const CLASS_NAME_ACTIVE = 'active'
+const CLASS_NAME_FADE = 'fade'
+const CLASS_NAME_SHOW = 'show'
+const CLASS_DROPDOWN = 'dropdown'
+
+const SELECTOR_DROPDOWN_TOGGLE = '.dropdown-toggle'
+const SELECTOR_DROPDOWN_MENU = '.dropdown-menu'
+const NOT_SELECTOR_DROPDOWN_TOGGLE = ':not(.dropdown-toggle)'
+
+const SELECTOR_TAB_PANEL = '.list-group, .nav, [role="tablist"]'
+const SELECTOR_OUTER = '.nav-item, .list-group-item'
+const SELECTOR_INNER = `.nav-link${NOT_SELECTOR_DROPDOWN_TOGGLE}, .list-group-item${NOT_SELECTOR_DROPDOWN_TOGGLE}, [role="tab"]${NOT_SELECTOR_DROPDOWN_TOGGLE}`
+const SELECTOR_DATA_TOGGLE = '[data-bs-toggle="tab"], [data-bs-toggle="pill"], [data-bs-toggle="list"]' // todo:v6: could be only `tab`
+const SELECTOR_INNER_ELEM = `${SELECTOR_INNER}, ${SELECTOR_DATA_TOGGLE}`
+
+const SELECTOR_DATA_TOGGLE_ACTIVE = `.${CLASS_NAME_ACTIVE}[data-bs-toggle="tab"], .${CLASS_NAME_ACTIVE}[data-bs-toggle="pill"], .${CLASS_NAME_ACTIVE}[data-bs-toggle="list"]`
+
+/**
+ * Class definition
+ */
+
+class Tab extends _base_component__WEBPACK_IMPORTED_MODULE_3__["default"] {
+  constructor(element) {
+    super(element)
+    this._parent = this._element.closest(SELECTOR_TAB_PANEL)
+
+    if (!this._parent) {
+      return
+      // todo: should Throw exception on v6
+      // throw new TypeError(`${element.outerHTML} has not a valid parent ${SELECTOR_INNER_ELEM}`)
+    }
+
+    // Set up initial aria attributes
+    this._setInitialAttributes(this._parent, this._getChildren())
+
+    _dom_event_handler__WEBPACK_IMPORTED_MODULE_1__["default"].on(this._element, EVENT_KEYDOWN, event => this._keydown(event))
+  }
+
+  // Getters
+  static get NAME() {
+    return NAME
+  }
+
+  // Public
+  show() { // Shows this elem and deactivate the active sibling if exists
+    const innerElem = this._element
+    if (this._elemIsActive(innerElem)) {
+      return
+    }
+
+    // Search for active tab on same parent to deactivate it
+    const active = this._getActiveElem()
+
+    const hideEvent = active ?
+      _dom_event_handler__WEBPACK_IMPORTED_MODULE_1__["default"].trigger(active, EVENT_HIDE, { relatedTarget: innerElem }) :
+      null
+
+    const showEvent = _dom_event_handler__WEBPACK_IMPORTED_MODULE_1__["default"].trigger(innerElem, EVENT_SHOW, { relatedTarget: active })
+
+    if (showEvent.defaultPrevented || (hideEvent && hideEvent.defaultPrevented)) {
+      return
+    }
+
+    this._deactivate(active, innerElem)
+    this._activate(innerElem, active)
+  }
+
+  // Private
+  _activate(element, relatedElem) {
+    if (!element) {
+      return
+    }
+
+    element.classList.add(CLASS_NAME_ACTIVE)
+
+    this._activate((0,_util_index__WEBPACK_IMPORTED_MODULE_0__.getElementFromSelector)(element)) // Search and activate/show the proper section
+
+    const complete = () => {
+      if (element.getAttribute('role') !== 'tab') {
+        element.classList.add(CLASS_NAME_SHOW)
+        return
+      }
+
+      element.removeAttribute('tabindex')
+      element.setAttribute('aria-selected', true)
+      this._toggleDropDown(element, true)
+      _dom_event_handler__WEBPACK_IMPORTED_MODULE_1__["default"].trigger(element, EVENT_SHOWN, {
+        relatedTarget: relatedElem
+      })
+    }
+
+    this._queueCallback(complete, element, element.classList.contains(CLASS_NAME_FADE))
+  }
+
+  _deactivate(element, relatedElem) {
+    if (!element) {
+      return
+    }
+
+    element.classList.remove(CLASS_NAME_ACTIVE)
+    element.blur()
+
+    this._deactivate((0,_util_index__WEBPACK_IMPORTED_MODULE_0__.getElementFromSelector)(element)) // Search and deactivate the shown section too
+
+    const complete = () => {
+      if (element.getAttribute('role') !== 'tab') {
+        element.classList.remove(CLASS_NAME_SHOW)
+        return
+      }
+
+      element.setAttribute('aria-selected', false)
+      element.setAttribute('tabindex', '-1')
+      this._toggleDropDown(element, false)
+      _dom_event_handler__WEBPACK_IMPORTED_MODULE_1__["default"].trigger(element, EVENT_HIDDEN, { relatedTarget: relatedElem })
+    }
+
+    this._queueCallback(complete, element, element.classList.contains(CLASS_NAME_FADE))
+  }
+
+  _keydown(event) {
+    if (!([ARROW_LEFT_KEY, ARROW_RIGHT_KEY, ARROW_UP_KEY, ARROW_DOWN_KEY].includes(event.key))) {
+      return
+    }
+
+    event.stopPropagation()// stopPropagation/preventDefault both added to support up/down keys without scrolling the page
+    event.preventDefault()
+    const isNext = [ARROW_RIGHT_KEY, ARROW_DOWN_KEY].includes(event.key)
+    const nextActiveElement = (0,_util_index__WEBPACK_IMPORTED_MODULE_0__.getNextActiveElement)(this._getChildren().filter(element => !(0,_util_index__WEBPACK_IMPORTED_MODULE_0__.isDisabled)(element)), event.target, isNext, true)
+
+    if (nextActiveElement) {
+      nextActiveElement.focus({ preventScroll: true })
+      Tab.getOrCreateInstance(nextActiveElement).show()
+    }
+  }
+
+  _getChildren() { // collection of inner elements
+    return _dom_selector_engine__WEBPACK_IMPORTED_MODULE_2__["default"].find(SELECTOR_INNER_ELEM, this._parent)
+  }
+
+  _getActiveElem() {
+    return this._getChildren().find(child => this._elemIsActive(child)) || null
+  }
+
+  _setInitialAttributes(parent, children) {
+    this._setAttributeIfNotExists(parent, 'role', 'tablist')
+
+    for (const child of children) {
+      this._setInitialAttributesOnChild(child)
+    }
+  }
+
+  _setInitialAttributesOnChild(child) {
+    child = this._getInnerElement(child)
+    const isActive = this._elemIsActive(child)
+    const outerElem = this._getOuterElement(child)
+    child.setAttribute('aria-selected', isActive)
+
+    if (outerElem !== child) {
+      this._setAttributeIfNotExists(outerElem, 'role', 'presentation')
+    }
+
+    if (!isActive) {
+      child.setAttribute('tabindex', '-1')
+    }
+
+    this._setAttributeIfNotExists(child, 'role', 'tab')
+
+    // set attributes to the related panel too
+    this._setInitialAttributesOnTargetPanel(child)
+  }
+
+  _setInitialAttributesOnTargetPanel(child) {
+    const target = (0,_util_index__WEBPACK_IMPORTED_MODULE_0__.getElementFromSelector)(child)
+
+    if (!target) {
+      return
+    }
+
+    this._setAttributeIfNotExists(target, 'role', 'tabpanel')
+
+    if (child.id) {
+      this._setAttributeIfNotExists(target, 'aria-labelledby', `#${child.id}`)
+    }
+  }
+
+  _toggleDropDown(element, open) {
+    const outerElem = this._getOuterElement(element)
+    if (!outerElem.classList.contains(CLASS_DROPDOWN)) {
+      return
+    }
+
+    const toggle = (selector, className) => {
+      const element = _dom_selector_engine__WEBPACK_IMPORTED_MODULE_2__["default"].findOne(selector, outerElem)
+      if (element) {
+        element.classList.toggle(className, open)
+      }
+    }
+
+    toggle(SELECTOR_DROPDOWN_TOGGLE, CLASS_NAME_ACTIVE)
+    toggle(SELECTOR_DROPDOWN_MENU, CLASS_NAME_SHOW)
+    outerElem.setAttribute('aria-expanded', open)
+  }
+
+  _setAttributeIfNotExists(element, attribute, value) {
+    if (!element.hasAttribute(attribute)) {
+      element.setAttribute(attribute, value)
+    }
+  }
+
+  _elemIsActive(elem) {
+    return elem.classList.contains(CLASS_NAME_ACTIVE)
+  }
+
+  // Try to get the inner element (usually the .nav-link)
+  _getInnerElement(elem) {
+    return elem.matches(SELECTOR_INNER_ELEM) ? elem : _dom_selector_engine__WEBPACK_IMPORTED_MODULE_2__["default"].findOne(SELECTOR_INNER_ELEM, elem)
+  }
+
+  // Try to get the outer element (usually the .nav-item)
+  _getOuterElement(elem) {
+    return elem.closest(SELECTOR_OUTER) || elem
+  }
+
+  // Static
+  static jQueryInterface(config) {
+    return this.each(function () {
+      const data = Tab.getOrCreateInstance(this)
+
+      if (typeof config !== 'string') {
+        return
+      }
+
+      if (data[config] === undefined || config.startsWith('_') || config === 'constructor') {
+        throw new TypeError(`No method named "${config}"`)
+      }
+
+      data[config]()
+    })
+  }
+}
+
+/**
+ * Data API implementation
+ */
+
+_dom_event_handler__WEBPACK_IMPORTED_MODULE_1__["default"].on(document, EVENT_CLICK_DATA_API, SELECTOR_DATA_TOGGLE, function (event) {
+  if (['A', 'AREA'].includes(this.tagName)) {
+    event.preventDefault()
+  }
+
+  if ((0,_util_index__WEBPACK_IMPORTED_MODULE_0__.isDisabled)(this)) {
+    return
+  }
+
+  Tab.getOrCreateInstance(this).show()
+})
+
+/**
+ * Initialize on focus
+ */
+_dom_event_handler__WEBPACK_IMPORTED_MODULE_1__["default"].on(window, EVENT_LOAD_DATA_API, () => {
+  for (const element of _dom_selector_engine__WEBPACK_IMPORTED_MODULE_2__["default"].find(SELECTOR_DATA_TOGGLE_ACTIVE)) {
+    Tab.getOrCreateInstance(element)
+  }
+})
+/**
+ * jQuery
+ */
+
+;(0,_util_index__WEBPACK_IMPORTED_MODULE_0__.defineJQueryPlugin)(Tab)
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Tab);
+
+
+/***/ }),
+
 /***/ "./node_modules/bootstrap/js/src/util/config.js":
 /*!******************************************************!*\
   !*** ./node_modules/bootstrap/js/src/util/config.js ***!
@@ -1120,6 +1757,30 @@ const getNextActiveElement = (list, activeElement, shouldGetNext, isCycleAllowed
 
 
 
+/***/ }),
+
+/***/ "./resources/scss/bootstrap.scss":
+/*!***************************************!*\
+  !*** ./resources/scss/bootstrap.scss ***!
+  \***************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
+
+/***/ }),
+
+/***/ "./node_modules/leaflet/dist/leaflet.css":
+/*!***********************************************!*\
+  !*** ./node_modules/leaflet/dist/leaflet.css ***!
+  \***********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
+
 /***/ })
 
 /******/ 	});
@@ -1148,7 +1809,42 @@ const getNextActiveElement = (list, activeElement, shouldGetNext, isCycleAllowed
 /******/ 		return module.exports;
 /******/ 	}
 /******/ 	
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = __webpack_modules__;
+/******/ 	
 /************************************************************************/
+/******/ 	/* webpack/runtime/chunk loaded */
+/******/ 	(() => {
+/******/ 		var deferred = [];
+/******/ 		__webpack_require__.O = (result, chunkIds, fn, priority) => {
+/******/ 			if(chunkIds) {
+/******/ 				priority = priority || 0;
+/******/ 				for(var i = deferred.length; i > 0 && deferred[i - 1][2] > priority; i--) deferred[i] = deferred[i - 1];
+/******/ 				deferred[i] = [chunkIds, fn, priority];
+/******/ 				return;
+/******/ 			}
+/******/ 			var notFulfilled = Infinity;
+/******/ 			for (var i = 0; i < deferred.length; i++) {
+/******/ 				var [chunkIds, fn, priority] = deferred[i];
+/******/ 				var fulfilled = true;
+/******/ 				for (var j = 0; j < chunkIds.length; j++) {
+/******/ 					if ((priority & 1 === 0 || notFulfilled >= priority) && Object.keys(__webpack_require__.O).every((key) => (__webpack_require__.O[key](chunkIds[j])))) {
+/******/ 						chunkIds.splice(j--, 1);
+/******/ 					} else {
+/******/ 						fulfilled = false;
+/******/ 						if(priority < notFulfilled) notFulfilled = priority;
+/******/ 					}
+/******/ 				}
+/******/ 				if(fulfilled) {
+/******/ 					deferred.splice(i--, 1)
+/******/ 					var r = fn();
+/******/ 					if (r !== undefined) result = r;
+/******/ 				}
+/******/ 			}
+/******/ 			return result;
+/******/ 		};
+/******/ 	})();
+/******/ 	
 /******/ 	/* webpack/runtime/define property getters */
 /******/ 	(() => {
 /******/ 		// define getter functions for harmony exports
@@ -1177,641 +1873,71 @@ const getNextActiveElement = (list, activeElement, shouldGetNext, isCycleAllowed
 /******/ 		};
 /******/ 	})();
 /******/ 	
+/******/ 	/* webpack/runtime/jsonp chunk loading */
+/******/ 	(() => {
+/******/ 		// no baseURI
+/******/ 		
+/******/ 		// object to store loaded and loading chunks
+/******/ 		// undefined = chunk not loaded, null = chunk preloaded/prefetched
+/******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
+/******/ 		var installedChunks = {
+/******/ 			"/js/bootstrap": 0,
+/******/ 			"css/leaflet": 0,
+/******/ 			"css/bootstrap": 0
+/******/ 		};
+/******/ 		
+/******/ 		// no chunk on demand loading
+/******/ 		
+/******/ 		// no prefetching
+/******/ 		
+/******/ 		// no preloaded
+/******/ 		
+/******/ 		// no HMR
+/******/ 		
+/******/ 		// no HMR manifest
+/******/ 		
+/******/ 		__webpack_require__.O.j = (chunkId) => (installedChunks[chunkId] === 0);
+/******/ 		
+/******/ 		// install a JSONP callback for chunk loading
+/******/ 		var webpackJsonpCallback = (parentChunkLoadingFunction, data) => {
+/******/ 			var [chunkIds, moreModules, runtime] = data;
+/******/ 			// add "moreModules" to the modules object,
+/******/ 			// then flag all "chunkIds" as loaded and fire callback
+/******/ 			var moduleId, chunkId, i = 0;
+/******/ 			if(chunkIds.some((id) => (installedChunks[id] !== 0))) {
+/******/ 				for(moduleId in moreModules) {
+/******/ 					if(__webpack_require__.o(moreModules, moduleId)) {
+/******/ 						__webpack_require__.m[moduleId] = moreModules[moduleId];
+/******/ 					}
+/******/ 				}
+/******/ 				if(runtime) var result = runtime(__webpack_require__);
+/******/ 			}
+/******/ 			if(parentChunkLoadingFunction) parentChunkLoadingFunction(data);
+/******/ 			for(;i < chunkIds.length; i++) {
+/******/ 				chunkId = chunkIds[i];
+/******/ 				if(__webpack_require__.o(installedChunks, chunkId) && installedChunks[chunkId]) {
+/******/ 					installedChunks[chunkId][0]();
+/******/ 				}
+/******/ 				installedChunks[chunkId] = 0;
+/******/ 			}
+/******/ 			return __webpack_require__.O(result);
+/******/ 		}
+/******/ 		
+/******/ 		var chunkLoadingGlobal = self["webpackChunk"] = self["webpackChunk"] || [];
+/******/ 		chunkLoadingGlobal.forEach(webpackJsonpCallback.bind(null, 0));
+/******/ 		chunkLoadingGlobal.push = webpackJsonpCallback.bind(null, chunkLoadingGlobal.push.bind(chunkLoadingGlobal));
+/******/ 	})();
+/******/ 	
 /************************************************************************/
-var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be isolated against other entry modules.
-(() => {
-var __webpack_exports__ = {};
-/*!***************************************************!*\
-  !*** ./node_modules/bootstrap/js/src/collapse.js ***!
-  \***************************************************/
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _util_index__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./util/index */ "./node_modules/bootstrap/js/src/util/index.js");
-/* harmony import */ var _dom_event_handler__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./dom/event-handler */ "./node_modules/bootstrap/js/src/dom/event-handler.js");
-/* harmony import */ var _dom_selector_engine__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./dom/selector-engine */ "./node_modules/bootstrap/js/src/dom/selector-engine.js");
-/* harmony import */ var _base_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./base-component */ "./node_modules/bootstrap/js/src/base-component.js");
-/**
- * --------------------------------------------------------------------------
- * Bootstrap (v5.2.3): collapse.js
- * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
- * --------------------------------------------------------------------------
- */
-
-
-
-
-
-
-/**
- * Constants
- */
-
-const NAME = 'collapse'
-const DATA_KEY = 'bs.collapse'
-const EVENT_KEY = `.${DATA_KEY}`
-const DATA_API_KEY = '.data-api'
-
-const EVENT_SHOW = `show${EVENT_KEY}`
-const EVENT_SHOWN = `shown${EVENT_KEY}`
-const EVENT_HIDE = `hide${EVENT_KEY}`
-const EVENT_HIDDEN = `hidden${EVENT_KEY}`
-const EVENT_CLICK_DATA_API = `click${EVENT_KEY}${DATA_API_KEY}`
-
-const CLASS_NAME_SHOW = 'show'
-const CLASS_NAME_COLLAPSE = 'collapse'
-const CLASS_NAME_COLLAPSING = 'collapsing'
-const CLASS_NAME_COLLAPSED = 'collapsed'
-const CLASS_NAME_DEEPER_CHILDREN = `:scope .${CLASS_NAME_COLLAPSE} .${CLASS_NAME_COLLAPSE}`
-const CLASS_NAME_HORIZONTAL = 'collapse-horizontal'
-
-const WIDTH = 'width'
-const HEIGHT = 'height'
-
-const SELECTOR_ACTIVES = '.collapse.show, .collapse.collapsing'
-const SELECTOR_DATA_TOGGLE = '[data-bs-toggle="collapse"]'
-
-const Default = {
-  parent: null,
-  toggle: true
-}
-
-const DefaultType = {
-  parent: '(null|element)',
-  toggle: 'boolean'
-}
-
-/**
- * Class definition
- */
-
-class Collapse extends _base_component__WEBPACK_IMPORTED_MODULE_3__["default"] {
-  constructor(element, config) {
-    super(element, config)
-
-    this._isTransitioning = false
-    this._triggerArray = []
-
-    const toggleList = _dom_selector_engine__WEBPACK_IMPORTED_MODULE_2__["default"].find(SELECTOR_DATA_TOGGLE)
-
-    for (const elem of toggleList) {
-      const selector = (0,_util_index__WEBPACK_IMPORTED_MODULE_0__.getSelectorFromElement)(elem)
-      const filterElement = _dom_selector_engine__WEBPACK_IMPORTED_MODULE_2__["default"].find(selector)
-        .filter(foundElement => foundElement === this._element)
-
-      if (selector !== null && filterElement.length) {
-        this._triggerArray.push(elem)
-      }
-    }
-
-    this._initializeChildren()
-
-    if (!this._config.parent) {
-      this._addAriaAndCollapsedClass(this._triggerArray, this._isShown())
-    }
-
-    if (this._config.toggle) {
-      this.toggle()
-    }
-  }
-
-  // Getters
-  static get Default() {
-    return Default
-  }
-
-  static get DefaultType() {
-    return DefaultType
-  }
-
-  static get NAME() {
-    return NAME
-  }
-
-  // Public
-  toggle() {
-    if (this._isShown()) {
-      this.hide()
-    } else {
-      this.show()
-    }
-  }
-
-  show() {
-    if (this._isTransitioning || this._isShown()) {
-      return
-    }
-
-    let activeChildren = []
-
-    // find active children
-    if (this._config.parent) {
-      activeChildren = this._getFirstLevelChildren(SELECTOR_ACTIVES)
-        .filter(element => element !== this._element)
-        .map(element => Collapse.getOrCreateInstance(element, { toggle: false }))
-    }
-
-    if (activeChildren.length && activeChildren[0]._isTransitioning) {
-      return
-    }
-
-    const startEvent = _dom_event_handler__WEBPACK_IMPORTED_MODULE_1__["default"].trigger(this._element, EVENT_SHOW)
-    if (startEvent.defaultPrevented) {
-      return
-    }
-
-    for (const activeInstance of activeChildren) {
-      activeInstance.hide()
-    }
-
-    const dimension = this._getDimension()
-
-    this._element.classList.remove(CLASS_NAME_COLLAPSE)
-    this._element.classList.add(CLASS_NAME_COLLAPSING)
-
-    this._element.style[dimension] = 0
-
-    this._addAriaAndCollapsedClass(this._triggerArray, true)
-    this._isTransitioning = true
-
-    const complete = () => {
-      this._isTransitioning = false
-
-      this._element.classList.remove(CLASS_NAME_COLLAPSING)
-      this._element.classList.add(CLASS_NAME_COLLAPSE, CLASS_NAME_SHOW)
-
-      this._element.style[dimension] = ''
-
-      _dom_event_handler__WEBPACK_IMPORTED_MODULE_1__["default"].trigger(this._element, EVENT_SHOWN)
-    }
-
-    const capitalizedDimension = dimension[0].toUpperCase() + dimension.slice(1)
-    const scrollSize = `scroll${capitalizedDimension}`
-
-    this._queueCallback(complete, this._element, true)
-    this._element.style[dimension] = `${this._element[scrollSize]}px`
-  }
-
-  hide() {
-    if (this._isTransitioning || !this._isShown()) {
-      return
-    }
-
-    const startEvent = _dom_event_handler__WEBPACK_IMPORTED_MODULE_1__["default"].trigger(this._element, EVENT_HIDE)
-    if (startEvent.defaultPrevented) {
-      return
-    }
-
-    const dimension = this._getDimension()
-
-    this._element.style[dimension] = `${this._element.getBoundingClientRect()[dimension]}px`
-
-    ;(0,_util_index__WEBPACK_IMPORTED_MODULE_0__.reflow)(this._element)
-
-    this._element.classList.add(CLASS_NAME_COLLAPSING)
-    this._element.classList.remove(CLASS_NAME_COLLAPSE, CLASS_NAME_SHOW)
-
-    for (const trigger of this._triggerArray) {
-      const element = (0,_util_index__WEBPACK_IMPORTED_MODULE_0__.getElementFromSelector)(trigger)
-
-      if (element && !this._isShown(element)) {
-        this._addAriaAndCollapsedClass([trigger], false)
-      }
-    }
-
-    this._isTransitioning = true
-
-    const complete = () => {
-      this._isTransitioning = false
-      this._element.classList.remove(CLASS_NAME_COLLAPSING)
-      this._element.classList.add(CLASS_NAME_COLLAPSE)
-      _dom_event_handler__WEBPACK_IMPORTED_MODULE_1__["default"].trigger(this._element, EVENT_HIDDEN)
-    }
-
-    this._element.style[dimension] = ''
-
-    this._queueCallback(complete, this._element, true)
-  }
-
-  _isShown(element = this._element) {
-    return element.classList.contains(CLASS_NAME_SHOW)
-  }
-
-  // Private
-  _configAfterMerge(config) {
-    config.toggle = Boolean(config.toggle) // Coerce string values
-    config.parent = (0,_util_index__WEBPACK_IMPORTED_MODULE_0__.getElement)(config.parent)
-    return config
-  }
-
-  _getDimension() {
-    return this._element.classList.contains(CLASS_NAME_HORIZONTAL) ? WIDTH : HEIGHT
-  }
-
-  _initializeChildren() {
-    if (!this._config.parent) {
-      return
-    }
-
-    const children = this._getFirstLevelChildren(SELECTOR_DATA_TOGGLE)
-
-    for (const element of children) {
-      const selected = (0,_util_index__WEBPACK_IMPORTED_MODULE_0__.getElementFromSelector)(element)
-
-      if (selected) {
-        this._addAriaAndCollapsedClass([element], this._isShown(selected))
-      }
-    }
-  }
-
-  _getFirstLevelChildren(selector) {
-    const children = _dom_selector_engine__WEBPACK_IMPORTED_MODULE_2__["default"].find(CLASS_NAME_DEEPER_CHILDREN, this._config.parent)
-    // remove children if greater depth
-    return _dom_selector_engine__WEBPACK_IMPORTED_MODULE_2__["default"].find(selector, this._config.parent).filter(element => !children.includes(element))
-  }
-
-  _addAriaAndCollapsedClass(triggerArray, isOpen) {
-    if (!triggerArray.length) {
-      return
-    }
-
-    for (const element of triggerArray) {
-      element.classList.toggle(CLASS_NAME_COLLAPSED, !isOpen)
-      element.setAttribute('aria-expanded', isOpen)
-    }
-  }
-
-  // Static
-  static jQueryInterface(config) {
-    const _config = {}
-    if (typeof config === 'string' && /show|hide/.test(config)) {
-      _config.toggle = false
-    }
-
-    return this.each(function () {
-      const data = Collapse.getOrCreateInstance(this, _config)
-
-      if (typeof config === 'string') {
-        if (typeof data[config] === 'undefined') {
-          throw new TypeError(`No method named "${config}"`)
-        }
-
-        data[config]()
-      }
-    })
-  }
-}
-
-/**
- * Data API implementation
- */
-
-_dom_event_handler__WEBPACK_IMPORTED_MODULE_1__["default"].on(document, EVENT_CLICK_DATA_API, SELECTOR_DATA_TOGGLE, function (event) {
-  // preventDefault only for <a> elements (which change the URL) not inside the collapsible element
-  if (event.target.tagName === 'A' || (event.delegateTarget && event.delegateTarget.tagName === 'A')) {
-    event.preventDefault()
-  }
-
-  const selector = (0,_util_index__WEBPACK_IMPORTED_MODULE_0__.getSelectorFromElement)(this)
-  const selectorElements = _dom_selector_engine__WEBPACK_IMPORTED_MODULE_2__["default"].find(selector)
-
-  for (const element of selectorElements) {
-    Collapse.getOrCreateInstance(element, { toggle: false }).toggle()
-  }
-})
-
-/**
- * jQuery
- */
-
-;(0,_util_index__WEBPACK_IMPORTED_MODULE_0__.defineJQueryPlugin)(Collapse)
-
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Collapse);
-
-})();
-
-// This entry need to be wrapped in an IIFE because it need to be isolated against other entry modules.
-(() => {
-/*!**********************************************!*\
-  !*** ./node_modules/bootstrap/js/src/tab.js ***!
-  \**********************************************/
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _util_index__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./util/index */ "./node_modules/bootstrap/js/src/util/index.js");
-/* harmony import */ var _dom_event_handler__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./dom/event-handler */ "./node_modules/bootstrap/js/src/dom/event-handler.js");
-/* harmony import */ var _dom_selector_engine__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./dom/selector-engine */ "./node_modules/bootstrap/js/src/dom/selector-engine.js");
-/* harmony import */ var _base_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./base-component */ "./node_modules/bootstrap/js/src/base-component.js");
-/**
- * --------------------------------------------------------------------------
- * Bootstrap (v5.2.3): tab.js
- * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
- * --------------------------------------------------------------------------
- */
-
-
-
-
-
-
-/**
- * Constants
- */
-
-const NAME = 'tab'
-const DATA_KEY = 'bs.tab'
-const EVENT_KEY = `.${DATA_KEY}`
-
-const EVENT_HIDE = `hide${EVENT_KEY}`
-const EVENT_HIDDEN = `hidden${EVENT_KEY}`
-const EVENT_SHOW = `show${EVENT_KEY}`
-const EVENT_SHOWN = `shown${EVENT_KEY}`
-const EVENT_CLICK_DATA_API = `click${EVENT_KEY}`
-const EVENT_KEYDOWN = `keydown${EVENT_KEY}`
-const EVENT_LOAD_DATA_API = `load${EVENT_KEY}`
-
-const ARROW_LEFT_KEY = 'ArrowLeft'
-const ARROW_RIGHT_KEY = 'ArrowRight'
-const ARROW_UP_KEY = 'ArrowUp'
-const ARROW_DOWN_KEY = 'ArrowDown'
-
-const CLASS_NAME_ACTIVE = 'active'
-const CLASS_NAME_FADE = 'fade'
-const CLASS_NAME_SHOW = 'show'
-const CLASS_DROPDOWN = 'dropdown'
-
-const SELECTOR_DROPDOWN_TOGGLE = '.dropdown-toggle'
-const SELECTOR_DROPDOWN_MENU = '.dropdown-menu'
-const NOT_SELECTOR_DROPDOWN_TOGGLE = ':not(.dropdown-toggle)'
-
-const SELECTOR_TAB_PANEL = '.list-group, .nav, [role="tablist"]'
-const SELECTOR_OUTER = '.nav-item, .list-group-item'
-const SELECTOR_INNER = `.nav-link${NOT_SELECTOR_DROPDOWN_TOGGLE}, .list-group-item${NOT_SELECTOR_DROPDOWN_TOGGLE}, [role="tab"]${NOT_SELECTOR_DROPDOWN_TOGGLE}`
-const SELECTOR_DATA_TOGGLE = '[data-bs-toggle="tab"], [data-bs-toggle="pill"], [data-bs-toggle="list"]' // todo:v6: could be only `tab`
-const SELECTOR_INNER_ELEM = `${SELECTOR_INNER}, ${SELECTOR_DATA_TOGGLE}`
-
-const SELECTOR_DATA_TOGGLE_ACTIVE = `.${CLASS_NAME_ACTIVE}[data-bs-toggle="tab"], .${CLASS_NAME_ACTIVE}[data-bs-toggle="pill"], .${CLASS_NAME_ACTIVE}[data-bs-toggle="list"]`
-
-/**
- * Class definition
- */
-
-class Tab extends _base_component__WEBPACK_IMPORTED_MODULE_3__["default"] {
-  constructor(element) {
-    super(element)
-    this._parent = this._element.closest(SELECTOR_TAB_PANEL)
-
-    if (!this._parent) {
-      return
-      // todo: should Throw exception on v6
-      // throw new TypeError(`${element.outerHTML} has not a valid parent ${SELECTOR_INNER_ELEM}`)
-    }
-
-    // Set up initial aria attributes
-    this._setInitialAttributes(this._parent, this._getChildren())
-
-    _dom_event_handler__WEBPACK_IMPORTED_MODULE_1__["default"].on(this._element, EVENT_KEYDOWN, event => this._keydown(event))
-  }
-
-  // Getters
-  static get NAME() {
-    return NAME
-  }
-
-  // Public
-  show() { // Shows this elem and deactivate the active sibling if exists
-    const innerElem = this._element
-    if (this._elemIsActive(innerElem)) {
-      return
-    }
-
-    // Search for active tab on same parent to deactivate it
-    const active = this._getActiveElem()
-
-    const hideEvent = active ?
-      _dom_event_handler__WEBPACK_IMPORTED_MODULE_1__["default"].trigger(active, EVENT_HIDE, { relatedTarget: innerElem }) :
-      null
-
-    const showEvent = _dom_event_handler__WEBPACK_IMPORTED_MODULE_1__["default"].trigger(innerElem, EVENT_SHOW, { relatedTarget: active })
-
-    if (showEvent.defaultPrevented || (hideEvent && hideEvent.defaultPrevented)) {
-      return
-    }
-
-    this._deactivate(active, innerElem)
-    this._activate(innerElem, active)
-  }
-
-  // Private
-  _activate(element, relatedElem) {
-    if (!element) {
-      return
-    }
-
-    element.classList.add(CLASS_NAME_ACTIVE)
-
-    this._activate((0,_util_index__WEBPACK_IMPORTED_MODULE_0__.getElementFromSelector)(element)) // Search and activate/show the proper section
-
-    const complete = () => {
-      if (element.getAttribute('role') !== 'tab') {
-        element.classList.add(CLASS_NAME_SHOW)
-        return
-      }
-
-      element.removeAttribute('tabindex')
-      element.setAttribute('aria-selected', true)
-      this._toggleDropDown(element, true)
-      _dom_event_handler__WEBPACK_IMPORTED_MODULE_1__["default"].trigger(element, EVENT_SHOWN, {
-        relatedTarget: relatedElem
-      })
-    }
-
-    this._queueCallback(complete, element, element.classList.contains(CLASS_NAME_FADE))
-  }
-
-  _deactivate(element, relatedElem) {
-    if (!element) {
-      return
-    }
-
-    element.classList.remove(CLASS_NAME_ACTIVE)
-    element.blur()
-
-    this._deactivate((0,_util_index__WEBPACK_IMPORTED_MODULE_0__.getElementFromSelector)(element)) // Search and deactivate the shown section too
-
-    const complete = () => {
-      if (element.getAttribute('role') !== 'tab') {
-        element.classList.remove(CLASS_NAME_SHOW)
-        return
-      }
-
-      element.setAttribute('aria-selected', false)
-      element.setAttribute('tabindex', '-1')
-      this._toggleDropDown(element, false)
-      _dom_event_handler__WEBPACK_IMPORTED_MODULE_1__["default"].trigger(element, EVENT_HIDDEN, { relatedTarget: relatedElem })
-    }
-
-    this._queueCallback(complete, element, element.classList.contains(CLASS_NAME_FADE))
-  }
-
-  _keydown(event) {
-    if (!([ARROW_LEFT_KEY, ARROW_RIGHT_KEY, ARROW_UP_KEY, ARROW_DOWN_KEY].includes(event.key))) {
-      return
-    }
-
-    event.stopPropagation()// stopPropagation/preventDefault both added to support up/down keys without scrolling the page
-    event.preventDefault()
-    const isNext = [ARROW_RIGHT_KEY, ARROW_DOWN_KEY].includes(event.key)
-    const nextActiveElement = (0,_util_index__WEBPACK_IMPORTED_MODULE_0__.getNextActiveElement)(this._getChildren().filter(element => !(0,_util_index__WEBPACK_IMPORTED_MODULE_0__.isDisabled)(element)), event.target, isNext, true)
-
-    if (nextActiveElement) {
-      nextActiveElement.focus({ preventScroll: true })
-      Tab.getOrCreateInstance(nextActiveElement).show()
-    }
-  }
-
-  _getChildren() { // collection of inner elements
-    return _dom_selector_engine__WEBPACK_IMPORTED_MODULE_2__["default"].find(SELECTOR_INNER_ELEM, this._parent)
-  }
-
-  _getActiveElem() {
-    return this._getChildren().find(child => this._elemIsActive(child)) || null
-  }
-
-  _setInitialAttributes(parent, children) {
-    this._setAttributeIfNotExists(parent, 'role', 'tablist')
-
-    for (const child of children) {
-      this._setInitialAttributesOnChild(child)
-    }
-  }
-
-  _setInitialAttributesOnChild(child) {
-    child = this._getInnerElement(child)
-    const isActive = this._elemIsActive(child)
-    const outerElem = this._getOuterElement(child)
-    child.setAttribute('aria-selected', isActive)
-
-    if (outerElem !== child) {
-      this._setAttributeIfNotExists(outerElem, 'role', 'presentation')
-    }
-
-    if (!isActive) {
-      child.setAttribute('tabindex', '-1')
-    }
-
-    this._setAttributeIfNotExists(child, 'role', 'tab')
-
-    // set attributes to the related panel too
-    this._setInitialAttributesOnTargetPanel(child)
-  }
-
-  _setInitialAttributesOnTargetPanel(child) {
-    const target = (0,_util_index__WEBPACK_IMPORTED_MODULE_0__.getElementFromSelector)(child)
-
-    if (!target) {
-      return
-    }
-
-    this._setAttributeIfNotExists(target, 'role', 'tabpanel')
-
-    if (child.id) {
-      this._setAttributeIfNotExists(target, 'aria-labelledby', `#${child.id}`)
-    }
-  }
-
-  _toggleDropDown(element, open) {
-    const outerElem = this._getOuterElement(element)
-    if (!outerElem.classList.contains(CLASS_DROPDOWN)) {
-      return
-    }
-
-    const toggle = (selector, className) => {
-      const element = _dom_selector_engine__WEBPACK_IMPORTED_MODULE_2__["default"].findOne(selector, outerElem)
-      if (element) {
-        element.classList.toggle(className, open)
-      }
-    }
-
-    toggle(SELECTOR_DROPDOWN_TOGGLE, CLASS_NAME_ACTIVE)
-    toggle(SELECTOR_DROPDOWN_MENU, CLASS_NAME_SHOW)
-    outerElem.setAttribute('aria-expanded', open)
-  }
-
-  _setAttributeIfNotExists(element, attribute, value) {
-    if (!element.hasAttribute(attribute)) {
-      element.setAttribute(attribute, value)
-    }
-  }
-
-  _elemIsActive(elem) {
-    return elem.classList.contains(CLASS_NAME_ACTIVE)
-  }
-
-  // Try to get the inner element (usually the .nav-link)
-  _getInnerElement(elem) {
-    return elem.matches(SELECTOR_INNER_ELEM) ? elem : _dom_selector_engine__WEBPACK_IMPORTED_MODULE_2__["default"].findOne(SELECTOR_INNER_ELEM, elem)
-  }
-
-  // Try to get the outer element (usually the .nav-item)
-  _getOuterElement(elem) {
-    return elem.closest(SELECTOR_OUTER) || elem
-  }
-
-  // Static
-  static jQueryInterface(config) {
-    return this.each(function () {
-      const data = Tab.getOrCreateInstance(this)
-
-      if (typeof config !== 'string') {
-        return
-      }
-
-      if (data[config] === undefined || config.startsWith('_') || config === 'constructor') {
-        throw new TypeError(`No method named "${config}"`)
-      }
-
-      data[config]()
-    })
-  }
-}
-
-/**
- * Data API implementation
- */
-
-_dom_event_handler__WEBPACK_IMPORTED_MODULE_1__["default"].on(document, EVENT_CLICK_DATA_API, SELECTOR_DATA_TOGGLE, function (event) {
-  if (['A', 'AREA'].includes(this.tagName)) {
-    event.preventDefault()
-  }
-
-  if ((0,_util_index__WEBPACK_IMPORTED_MODULE_0__.isDisabled)(this)) {
-    return
-  }
-
-  Tab.getOrCreateInstance(this).show()
-})
-
-/**
- * Initialize on focus
- */
-_dom_event_handler__WEBPACK_IMPORTED_MODULE_1__["default"].on(window, EVENT_LOAD_DATA_API, () => {
-  for (const element of _dom_selector_engine__WEBPACK_IMPORTED_MODULE_2__["default"].find(SELECTOR_DATA_TOGGLE_ACTIVE)) {
-    Tab.getOrCreateInstance(element)
-  }
-})
-/**
- * jQuery
- */
-
-;(0,_util_index__WEBPACK_IMPORTED_MODULE_0__.defineJQueryPlugin)(Tab)
-
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Tab);
-
-})();
-
+/******/ 	
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
+/******/ 	__webpack_require__.O(undefined, ["css/leaflet","css/bootstrap"], () => (__webpack_require__("./node_modules/bootstrap/js/src/collapse.js")))
+/******/ 	__webpack_require__.O(undefined, ["css/leaflet","css/bootstrap"], () => (__webpack_require__("./node_modules/bootstrap/js/src/tab.js")))
+/******/ 	__webpack_require__.O(undefined, ["css/leaflet","css/bootstrap"], () => (__webpack_require__("./resources/scss/bootstrap.scss")))
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["css/leaflet","css/bootstrap"], () => (__webpack_require__("./node_modules/leaflet/dist/leaflet.css")))
+/******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
+/******/ 	
 /******/ })()
 ;
