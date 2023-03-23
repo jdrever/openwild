@@ -2,18 +2,5 @@
     "/js/app.js": "/js/app.js",
     "/js/bootstrap.js": "/js/bootstrap.js",
     "/css/leaflet.css": "/css/leaflet.css",
-    "/css/bootstrap.css": "/css/bootstrap.css",
-    "/js/site-name-autocomplete.js": "/js/site-name-autocomplete.js",
-    "/js/species-name-autocomplete.js": "/js/species-name-autocomplete.js",
-    "/js/update-dataset.js": "/js/update-dataset.js",
-    "/js/BasicMap.js": "/js/BasicMap.js",
-    "/js/Leaflet.MetricGrid.js": "/js/Leaflet.MetricGrid.js",
-    "/js/leaflet.wms.js": "/js/leaflet.wms.js",
-    "/js/proj4.js": "/js/proj4.js",
-    "/js/wicket.js": "/js/wicket.js",
-    "/js/bigr.min.umd.js": "/js/bigr.min.umd.js",
-    "/js/d3.min.js": "/js/d3.min.js",
-    "/css/app.css": "/css/app.css",
-    "/css/shropshire-style.css": "/css/shropshire-style.css",
-    "/css/enhancements.css": "/css/enhancements.css"
+    "/css/bootstrap.css": "/css/bootstrap.css"
 }

@@ -1,5 +1,4 @@
-let speciesName=document.getElementById("speciesName");
-
+let speciesName = document.getElementById("speciesName");
 let autocompleteContainer = document.getElementById("autocomplete-container");
 
 speciesName.addEventListener('input', function (evt)
@@ -19,59 +18,41 @@ speciesName.addEventListener('input', function (evt)
     if (userInput.length > 0) {
         fetch(updateUrl).then(function (response) {
             // The API call was successful!
+            console.log("Searching for "+speciesNameType+" '"+userInput+"'");
             return response.text();
         }).then(function (html) {
             autocompleteContainer.style.display = "block";
             autocompleteContainer.innerHTML = html;
-    }).catch(function (err) {
-        // There was an error
-        console.warn('Something went wrong.', err);
-    });
-}});
+        }).catch(function (err) {
+            // There was an error
+            console.warn('Something went wrong.', err);
+        });
+    } else {
+        // Hide/empty autocomplete dropdown if user clears speciesName input
+        autocompleteContainer.innerHTML = "";
+    }
 
-// speciesNameInput gain focus - show autocomplete list
-// speciesNameInput lose focus - hide autocomplete list
+});
 
-speciesName.addEventListener('focus', function (evt) {
+// Show the autocompletecontainer if clicked on the speciesName input box 
+speciesName.addEventListener('focus', function() {
     autocompleteContainer.style.display = "block";
 });
 
-speciesName.addEventListener('focusout', function (evt) {
-    //autocompleteContainer.style.display = "none";
-    console.log("input focusout");
-});
-
-autocompleteContainer.addEventListener('focusout', function (evt) {
-    //autocompleteContainer.style.display = "none";
-    console.log("ac focusout");
-});
-
-document.getElementById("search-container").addEventListener('focusout', function (evt) {
-    //autocompleteContainer.style.display = "none";
-    console.log("container focusout");
-});
-
-document.addEventListener("click", function (e) {
+// If user clicks on document other than the input or the autocompletecontainer, hide the container 
+document.addEventListener("click", function(e) {
     if (e.target != autocompleteContainer && e.target != speciesName) {
         autocompleteContainer.style.display = "none";
     }
 });
 
-// autocomplete-item
-// on hover - highlight w css
-// on click - set text to value
-
 function autocomplete(string) {
     console.log(string + " clicked")
     speciesName.value = string;
-    //autocompleteContainer.style.display = "none";
+    // TODO - trigger speciesName changed
 }
 
 // keyinput
 // up - if autocomplete list shown, move active selected up
 // down - if autocomplete list shown, move active selected down
 // enter - if autocomplete list shown, click on active selected
-
-function copy(string) {
-    navigator.clipboard.writeText(string);
-}
