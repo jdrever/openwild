@@ -59,8 +59,6 @@ speciesName.addEventListener("keydown", function(e) {
         currentFocus = autocompleteContainer.children.length - 1;
     }
 
-    console.log(e.code + " keypressed, currentfocus is " + currentFocus);
-
     switch (e.code) {
         case "ArrowUp":
             if (autocompleteContainer.children.length != 0 && currentFocus > 0) {
@@ -101,8 +99,3 @@ function autocompleteFocus(prev, current) {
 
     autocompleteContainer.children[current].classList.add("autocomplete-focus");
 }
-
-// keyinput
-// up - if autocomplete list shown, move active selected up
-// down - if autocomplete list shown, move active selected down
-// enter - if autocomplete list shown, click on active selected
