@@ -19,6 +19,7 @@ class NbnQueryBuilder
     const OCCURRENCE = '/occurrence';
     const OCCURRENCE_DOWNLOAD = '/occurrences/index/download';
 
+    const AUTOCOMPLETE_SEARCH_SPECIES = '/search';
     const AUTOCOMPLETE_SEARCH = '/search/auto';
     const AUTOCOMPLETE_OCCURRENCES_SEARCH = '/autocomplete/search';
 
@@ -279,9 +280,9 @@ class NbnQueryBuilder
      *
      * @return string
      */
-    public function getAutocompleteQueryString($speciesName): string
+    public function getAutocompleteQueryString($speciesName, $speciesNameType, $speciesGroup): string
     {
-        return $this::SPECIES_URL.$this->searchType.'/?q='.$this->prepareAutocompleteSearchString($speciesName, true).'&idxType=TAXON';
+        return $this::SPECIES_URL.$this->searchType.'?q='.$speciesNameType.':'.$this->prepareAutocompleteSearchString($speciesName, true).'&fq=rank:species%20AND%20speciesGroup:'.$speciesGroup.'&pageSize=10';
     }
 
     /**
@@ -607,17 +608,9 @@ class NbnQueryBuilder
 
         $searchString = ucfirst(strtolower($searchString));
         $searchWords = explode(' ', $searchString);
-        if (count($searchWords) === 1) {
-            return rawurlencode($searchString);
-        }
-        $preparedSearchString = $searchWords[0];
-        unset($searchWords[0]);
-        foreach ($searchWords as $searchWord) {
-            $preparedSearchString .= '+AND+'.$searchWord;
-        }
-        $preparedSearchString = str_replace(' ', '+%2B', $preparedSearchString);
+        $preparedSearchString = implode('*+AND+*', $searchWords);
 
-        return $preparedSearchString;
+        return '*'.$preparedSearchString.'*';
     }
 
     /**

@@ -198,12 +198,12 @@ class NbnQueryService implements QueryService
         return $queryResult;
     }
 
-    public function getSpeciesNameAutocomplete(string $speciesName): AutocompleteResult
+    public function getSpeciesNameAutocomplete(string $speciesName, string $speciesNameType, string $speciesGroup): AutocompleteResult
     {
-        $nbnQuery = new NbnQueryBuilder(NbnQueryBuilder::AUTOCOMPLETE_SEARCH);
-        $nbnQueryUrl = $nbnQuery->getAutocompleteQueryString($speciesName);
+        $nbnQuery = new NbnQueryBuilder(NbnQueryBuilder::AUTOCOMPLETE_SEARCH_SPECIES);
+        $nbnQueryUrl = $nbnQuery->getAutocompleteQueryString($speciesName, $speciesNameType, $speciesGroup);
         $nbnQueryResponse = $this->callNbnApi($nbnQueryUrl);
-        $queryResult = $this->createSpeciesNameAutocompleteResult($nbnQueryResponse, $nbnQueryUrl);
+        $queryResult = $this->createSpeciesNameAutocompleteResult($nbnQueryResponse, $speciesNameType, $nbnQueryUrl);
 
         return $queryResult;
     }
@@ -324,16 +324,14 @@ class NbnQueryService implements QueryService
         return $occurrenceResult;
     }
 
-    private function createSpeciesNameAutocompleteResult(NbnApiResponse $nbnApiResponse, string $queryUrl)
+    private function createSpeciesNameAutocompleteResult(NbnApiResponse $nbnApiResponse, string $speciesNameType, string $queryUrl)
     {
         $queryResult = $this->createAutoCompleteResult($nbnApiResponse, $queryUrl);
-
         if ($nbnApiResponse->status) {
-            $nbnApiRecords = $nbnApiResponse->getRecords(NbnQueryBuilder::AUTOCOMPLETE_SEARCH);
+            $nbnApiRecords = $nbnApiResponse->getRecords(NbnQueryBuilder::AUTOCOMPLETE_SEARCH_SPECIES);
             $records = [];
             foreach ($nbnApiRecords as $record) {
-                $speciesNameType = isset($record->commonName) ? 'Common Name' : 'Scientific Name';
-                $records[] = $speciesNameType.': '.$record->matchedNames[0];
+                $records[] = $record->{$speciesNameType};
             }
             $queryResult->records = $records;
         }

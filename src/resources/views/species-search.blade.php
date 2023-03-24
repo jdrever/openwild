@@ -6,14 +6,15 @@
 <form action="/" action="post">
 @csrf
 <div class="row mb-2">
-	<div class="col-lg-8 mx-auto">
+	<div id="search-container" class="col-lg-8 mx-auto" position="relative">
 		<label for="search" class="form-label visually-hidden">Species name</label>
 		<div class="input-group">
-            <input type="text" id="speciesName" class="form-control" name="speciesName" aria-describedby="search-help" placeholder="Species name" value="{{ $speciesName }}" list="speciesNameAutocompleteList" autocomplete="off"/>
+            <input type="text" id="speciesName" class="form-control" name="speciesName" aria-describedby="search-help" placeholder="Species name" value="{{ $speciesName }}"  autocomplete="off"/>
             <datalist id="speciesNameAutocompleteList" name="speciesNameAutocompleteList">
             </datalist>
             <button type="submit" data-refresh="true" class="btn btn-primary">List Species</button>
 		</div>
+        <div id="autocomplete-container"></div>
 		<small id="search-help" class="form-text text-start text-md-center d-block">Enter all or part of a species name. Try something like "{{ config('core.speciesNameExample')}}".</small>
 	</div>
 </div>
