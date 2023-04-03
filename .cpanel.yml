@@ -1,0 +1,5 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/eaaaafba/wildsearch.careful.digital/
+    - /bin/cp -R src/. $DEPLOYPATH
