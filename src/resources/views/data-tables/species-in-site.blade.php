@@ -17,11 +17,11 @@
 			<tbody>
 				@foreach ($results->records as $species)
 				<tr>
-						<td class="d-none d-md-table-cell">{{ $species->family }}</td>
-						<td>{{ $species->scientificName }}</td>
-						<td class="d-none d-sm-table-cell">{{ $species->commonName }}</td>
-						<td><?=$species->recordCount?></td>
-						<td><a href="/site/{{ $siteName }}/species/{{ $species->scientificName }}">see records</a></td>
+					<td class="d-none d-md-table-cell">{{ $species->family }}</td>
+					<td>{{ $species->scientificName }}</td>
+					<td class="d-none d-sm-table-cell">{{ $species->commonName }}</td>
+					<td><?=$species->recordCount?></td>
+					<td><a href="/site/{{ $siteName }}/species/{{ $species->scientificName }}">see records</a></td>
 				</tr>
 				@endforeach
 			</tbody>
@@ -32,21 +32,21 @@
 	</div>
 </div>
 <script>
-    function addMarker(map) {
-		// Unless the first occurrence didn't contain a site location, create a
-		// marker for the site's location
-		@if (!empty($results->siteLocation))
-		const siteMarker = L.marker([{{ rtrim(implode(',',$results->siteLocation),',') }}], {
-			opacity: 0.75
-		});
-		siteMarker.addTo(map);
-		@endif
-    }
-
 	function loadMap() {
+		function addMarker() {
+			// Unless the first occurrence didn't contain a site location, create a
+			// marker for the site's location
+			@if (!empty($results->siteLocation))
+			const siteMarker = L.marker([{{ rtrim(implode(',',$results->siteLocation),',') }}], {
+				opacity: 0.75
+			});
+			siteMarker.addTo(map);
+			@endif
+    	}
+
 		// Initialise the map
 		const map = initialiseBasicMap('{{ config('core.region') }}')
-    	addMarker(map);
+    	addMarker();
 	}
 
 	loadMap();

@@ -1,16 +1,22 @@
-function listenForRefreshClicks()
+function listenForRefreshClicks(parent)
 {
-    document.querySelectorAll("[data-refresh='true']").forEach(item => {
+    parent.querySelectorAll("[data-refresh='true']").forEach(item => {
+        console.log("data-refresher listener added");
         item.addEventListener('click', event => {
+            console.log("data-refresher checked");
             pageNumber=item.hasAttribute('data-page') ? item.dataset.page : 1;
-            //if (updateDataset(pageNumber));
-            //    event.preventDefault();
-            updateDataset(pageNumber);
+            console.log(item.tagName)
+            if (updateDataset(pageNumber) && item.tagName == "A") {
+                // Try to update dataset - if it was sucessful we don't want to follow link
+                // TODO - might break noJavascript href stuff?
+                event.preventDefault();
+            }
         })
     })
 }
 
-listenForRefreshClicks();
+// At the start, add listeners for clicks for all refresh items
+listenForRefreshClicks(document);
 
 function updateDataset(pageNumber) {
     console.log("showSpinner");
@@ -21,22 +27,19 @@ function updateDataset(pageNumber) {
         console.log("The API call was successful!");
         return response.text();
     }).then(function (html) {
-        var elem = document.querySelector('#data-table');
+        var dataTable = document.querySelector('#data-table');
 
-        //Set HTML content - refresh 
-        elem.innerHTML = html;
+        // Refresh data-table html
+        dataTable.innerHTML = html;
 
+        // Reload map if necessary
         if (document.getElementById('map-container')) {
             loadMap();
         }
 
-        // TODO - newly loaded data-refresh elements won't have onclick now :O
+        // Re-add listeners for data-refresh items that got reloaded (pagination links)
+        listenForRefreshClicks(dataTable);
 
-        //if (document.getElementById('map-container')) {
-        //    const map = initialiseBasicMap();
-        //    updateMarker();
-        //}
-        //listenForRefreshClicks();
         return true;
     }).catch(function (err) {
         // There was an error

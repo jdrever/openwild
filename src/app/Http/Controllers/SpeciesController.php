@@ -206,7 +206,7 @@ class SpeciesController extends Controller
     {
         $results = $this->queryService->getSpeciesNameAutocomplete($speciesName, $nameType, $speciesGroup);
 
-        return view('partials/search-autocomplete',
+        return view('partials/species-search-autocomplete',
         [
             'results' => $results,
             'speciesName' => $speciesName

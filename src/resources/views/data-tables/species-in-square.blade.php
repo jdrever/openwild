@@ -32,7 +32,11 @@
 	</div>
 </div>
 <script>
-	function reset() {
+	function loadMap() {
+		// Initialise the map
+		const map = initialiseBasicMap('{{ config('core.region') }}')
+		map.on("zoomend", reset)
+
 		// Use d3 and bigr to convert the gridSquare into a path that is rendered
 		// onto the map whenever it is zoomed to highlight the grid square
 		var svg = d3.select(map.getPanes().overlayPane).append("svg")
@@ -40,46 +44,42 @@
 		var transform = d3.geoTransform({point: projectPoint})
 		var path = d3.geoPath().projection(transform)
 
-		var ftrSquare = {
-      		type: 'Feature',
-      		geometry: bigr.getGjson("{{ $gridSquare }}", 'wg', 'square')
+		function reset() {
+			var ftrSquare = {
+    	  		type: 'Feature',
+    	  		geometry: bigr.getGjson("{{ $gridSquare }}", 'wg', 'square')
+    		}
+
+    		var square = g.selectAll("path")
+    	  		.data([ftrSquare])
+
+    		square.enter()
+    	  		.append("path")
+    	  		.attr("d", path)
+    	  		.attr("class", 'square')
+
+    	  	var bounds = path.bounds({
+    	    	type: "FeatureCollection",
+    	    	features: [ftrSquare]
+    	  	})
+
+    	  	var topLeft = bounds[0]
+    	  	var bottomRight = bounds[1]
+
+    	  	svg.attr("width", bottomRight[0] - topLeft[0])
+    	    	.attr("height", bottomRight[1] - topLeft[1])
+    	    	.style("left", topLeft[0] + "px")
+    	    	.style("top", topLeft[1] + "px")
+
+    	  	g.attr("transform", "translate(" + -topLeft[0] + "," + -topLeft[1] + ")")
+
+    	  	square.attr("d", path)
     	}
 
-    	var square = g.selectAll("path")
-      		.data([ftrSquare])
-
-    	square.enter()
-      		.append("path")
-      		.attr("d", path)
-      		.attr("class", 'square')
-
-      	var bounds = path.bounds({
-        	type: "FeatureCollection",
-        	features: [ftrSquare]
-      	})
-
-      	var topLeft = bounds[0]
-      	var bottomRight = bounds[1]
-
-      	svg.attr("width", bottomRight[0] - topLeft[0])
-        	.attr("height", bottomRight[1] - topLeft[1])
-        	.style("left", topLeft[0] + "px")
-        	.style("top", topLeft[1] + "px")
-
-      	g.attr("transform", "translate(" + -topLeft[0] + "," + -topLeft[1] + ")")
-
-      	square.attr("d", path)
-    }
-
-    function projectPoint(x, y) {
-    	var point = map.latLngToLayerPoint(new L.LatLng(y, x))
-		this.stream.point(point.x, point.y)
-    }
-
-	function loadMap() {
-		// Initialise the map
-		const map = initialiseBasicMap('{{ config('core.region') }}')
-		map.on("zoomend", reset)
+    	function projectPoint(x, y) {
+    		var point = map.latLngToLayerPoint(new L.LatLng(y, x))
+			this.stream.point(point.x, point.y)
+    	}
 	}
 
 	loadMap();
