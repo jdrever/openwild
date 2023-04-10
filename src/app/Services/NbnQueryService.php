@@ -326,7 +326,7 @@ class NbnQueryService implements QueryService
 
     private function createSpeciesNameAutocompleteResult(NbnApiResponse $nbnApiResponse, string $speciesNameType, string $queryUrl)
     {
-        $queryResult = $this->createAutoCompleteResult($nbnApiResponse, $queryUrl);
+        $queryResult = $this->createAutocompleteResult($nbnApiResponse, $queryUrl);
         if ($nbnApiResponse->status) {
             $nbnApiRecords = $nbnApiResponse->getRecords(NbnQueryBuilder::AUTOCOMPLETE_SEARCH_SPECIES);
             $records = [];
@@ -341,7 +341,7 @@ class NbnQueryService implements QueryService
 
     private function createSiteNameAutocompleteResult(NbnApiResponse $nbnApiResponse, string $queryUrl)
     {
-        $queryResult = $this->createAutoCompleteResult($nbnApiResponse, $queryUrl);
+        $queryResult = $this->createAutocompleteResult($nbnApiResponse, $queryUrl);
         if ($nbnApiResponse->status) {
             $nbnApiRecords = $nbnApiResponse->getRecords(NbnQueryBuilder::OCCURRENCES_SEARCH);
             //dd($nbnApiRecords);
@@ -355,7 +355,7 @@ class NbnQueryService implements QueryService
         return $queryResult;
     }
 
-    private function createAutoCompleteResult(NbnApiResponse $nbnApiResponse, string $queryUrl): AutocompleteResult
+    private function createAutocompleteResult(NbnApiResponse $nbnApiResponse, string $queryUrl): AutocompleteResult
     {
         $queryResult = new AutocompleteResult();
         $queryResult->status = $nbnApiResponse->status;

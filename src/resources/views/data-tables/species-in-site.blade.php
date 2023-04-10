@@ -32,13 +32,8 @@
 	</div>
 </div>
 <script>
-	// Initialise the map
-	const map = initialiseBasicMap('{{ config('core.region') }}')
-    addMarker();
-
-    function addMarker()
-    {
-			// Unless the first occurrence didn't contain a site location, create a
+    function addMarker(map) {
+		// Unless the first occurrence didn't contain a site location, create a
 		// marker for the site's location
 		@if (!empty($results->siteLocation))
 		const siteMarker = L.marker([{{ rtrim(implode(',',$results->siteLocation),',') }}], {
@@ -47,6 +42,14 @@
 		siteMarker.addTo(map);
 		@endif
     }
+
+	function loadMap() {
+		// Initialise the map
+		const map = initialiseBasicMap('{{ config('core.region') }}')
+    	addMarker(map);
+	}
+
+	loadMap();
 </script>
 
 @include('partials/pagination')

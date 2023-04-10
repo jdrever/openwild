@@ -1,12 +1,13 @@
 function listenForRefreshClicks()
 {
-document.querySelectorAll("[data-refresh='true']").forEach(item => {
-    item.addEventListener('click', event => {
-        pageNumber=item.hasAttribute('data-page') ? item.dataset.page : 1;
-        if (updateDataset(pageNumber));
-            event.preventDefault();
+    document.querySelectorAll("[data-refresh='true']").forEach(item => {
+        item.addEventListener('click', event => {
+            pageNumber=item.hasAttribute('data-page') ? item.dataset.page : 1;
+            //if (updateDataset(pageNumber));
+            //    event.preventDefault();
+            updateDataset(pageNumber);
+        })
     })
-  })
 }
 
 listenForRefreshClicks();
@@ -22,13 +23,20 @@ function updateDataset(pageNumber) {
     }).then(function (html) {
         var elem = document.querySelector('#data-table');
 
-        //Set HTML content
+        //Set HTML content - refresh 
         elem.innerHTML = html;
+
         if (document.getElementById('map-container')) {
-            const map = initialiseBasicMap();
-            updateMarker();
+            loadMap();
         }
-        listenForRefreshClicks();
+
+        // TODO - newly loaded data-refresh elements won't have onclick now :O
+
+        //if (document.getElementById('map-container')) {
+        //    const map = initialiseBasicMap();
+        //    updateMarker();
+        //}
+        //listenForRefreshClicks();
         return true;
     }).catch(function (err) {
         // There was an error

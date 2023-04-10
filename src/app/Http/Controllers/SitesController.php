@@ -77,17 +77,18 @@ class SitesController extends Controller
             'speciesGroup' => $speciesGroup,
             'axiophyteFilter' => $axiophyteFilter,
             'showResults' => true,
-            'results' =>$results,
+            'results' => $results
         ]);
     }
 
-    public function getSiteNameAutoComplete($siteName)
+    public function getSiteNameAutocomplete($siteName)
     {
-        $results = $this->queryService->getSiteNameAutoComplete($siteName);
+        $results = $this->queryService->getSiteNameAutocomplete($siteName);
 
-        return view('partials/search-autocomplete',
+        return view('partials/sites-search-autocomplete',
         [
-            'results' =>$results,
+            'results' => $results,
+            'siteName' => $siteName
         ]);
     }
 }

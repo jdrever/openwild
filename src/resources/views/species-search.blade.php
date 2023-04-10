@@ -10,8 +10,6 @@
 		<label for="search" class="form-label visually-hidden">Species name</label>
 		<div class="input-group">
             <input type="text" id="speciesName" class="form-control" name="speciesName" aria-describedby="search-help" placeholder="Species name" value="{{ $speciesName }}"  autocomplete="off"/>
-            <datalist id="speciesNameAutocompleteList" name="speciesNameAutocompleteList">
-            </datalist>
             <button type="submit" data-refresh="true" class="btn btn-primary">List Species</button>
 		</div>
         <div id="autocomplete-container"></div>

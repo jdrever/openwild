@@ -22,13 +22,13 @@ Route::get('/', [SpeciesController::class, 'index']);
 Route::post('/', [SpeciesController::class, 'index']);
 Route::get('/species/{speciesName}/type/{speciesNameType}/group/{speciesGroup}/axiophytes/{axiophyteFilter}/{refresh?}', [SpeciesController::class, 'listForDataset']);
 Route::get('/species/{speciesName}', [RecordsController::class, 'singleSpeciesForDataset']);
-Route::get('/species-autocomplete/{speciesName}/{nameType}/{speciesGroup}', [SpeciesController::class, 'getSpeciesNameAutoComplete']);
+Route::get('/species-autocomplete/{speciesName}/{nameType}/{speciesGroup}', [SpeciesController::class, 'getSpeciesNameAutocomplete']);
 Route::get('/record/{occurrenceId}', [RecordsController::class, 'singleRecord']);
 
 Route::get('/sites/', [SitesController::class, 'index']);
 Route::post('/sites/', [SitesController::class, 'index']);
 Route::get('/sites/{siteName}', [SitesController::class, 'listForDataset']);
-Route::get('/sites-autocomplete/{siteName}', [SitesController::class, 'getSiteNameAutoComplete']);
+Route::get('/sites-autocomplete/{siteName}', [SitesController::class, 'getSiteNameAutocomplete']);
 Route::get('/site/{siteName}/type/{speciesNameType}/group/{speciesGroup}/axiophytes/{axiophyteFilter}/{refresh?}', [SpeciesController::class, 'listForSite']);
 Route::get('/site/{siteName}/species/{speciesName}', [RecordsController::class, 'singleSpeciesForSite']);
 

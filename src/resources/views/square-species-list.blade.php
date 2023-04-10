@@ -1,9 +1,8 @@
 <x-layout>
-
-    <script type="text/javascript" src="/js/update-dataset.js"></script>
     <script>
     function getUpdateUrl(pageNumber)
     {
+        console.log("update");
         let speciesNameType=document.querySelector('input[name="speciesNameType"]:checked').value;
         let speciesGroup=document.querySelector('input[name="speciesGroup"]:checked').value;
         let axiophyteFilter=document.getElementById("axiophyteFilter").checked;
@@ -11,6 +10,7 @@
         return updateUrl;
     }
     </script>
+    <script type="text/javascript" src="/js/update-dataset.js"></script>
 
 <style>
 	svg {

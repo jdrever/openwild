@@ -196,21 +196,20 @@ class SpeciesController extends Controller
         //dd($results);
         return view('axiophytes',
         [
-            'results' =>$results,
+            'results' => $results,
             'showResults' => true,
-            'speciesNameType' =>$speciesNameType,
+            'speciesNameType' => $speciesNameType
         ]);
     }
 
-    public function getSpeciesNameAutoComplete($speciesName, $nameType, $speciesGroup)
+    public function getSpeciesNameAutocomplete($speciesName, $nameType, $speciesGroup)
     {
-        $results = $this->queryService->getSpeciesNameAutoComplete($speciesName, $nameType, $speciesGroup);
+        $results = $this->queryService->getSpeciesNameAutocomplete($speciesName, $nameType, $speciesGroup);
 
         return view('partials/search-autocomplete',
         [
             'results' => $results,
-            'nameType' => $nameType,
-            'speciesName'=>$speciesName
+            'speciesName' => $speciesName
         ]);
     }
 }

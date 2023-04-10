@@ -32,22 +32,17 @@
 	</div>
 </div>
 <script>
-	// Initialise the map
-	const map = initialiseBasicMap('{{ config('core.region') }}')
+	function reset() {
+		// Use d3 and bigr to convert the gridSquare into a path that is rendered
+		// onto the map whenever it is zoomed to highlight the grid square
+		var svg = d3.select(map.getPanes().overlayPane).append("svg")
+		var g = svg.append("g").attr("class", "leaflet-zoom-hide");
+		var transform = d3.geoTransform({point: projectPoint})
+		var path = d3.geoPath().projection(transform)
 
-	// Use d3 and bigr to convert the gridSquare into a path that is rendered
-	// onto the map whenever it is zoomed to highlight the grid square
-	var svg = d3.select(map.getPanes().overlayPane).append("svg")
-    var g = svg.append("g").attr("class", "leaflet-zoom-hide");
-    var transform = d3.geoTransform({point: projectPoint})
-    var path = d3.geoPath().projection(transform)
-
-    map.on("zoomend", reset)
-
-    function reset() {
 		var ftrSquare = {
       		type: 'Feature',
-      		geometry: bigr.getGjson("{{ $longitude }}", 'wg', 'square')
+      		geometry: bigr.getGjson("{{ $gridSquare }}", 'wg', 'square')
     	}
 
     	var square = g.selectAll("path")
@@ -80,6 +75,14 @@
     	var point = map.latLngToLayerPoint(new L.LatLng(y, x))
 		this.stream.point(point.x, point.y)
     }
+
+	function loadMap() {
+		// Initialise the map
+		const map = initialiseBasicMap('{{ config('core.region') }}')
+		map.on("zoomend", reset)
+	}
+
+	loadMap();
 </script>
     @include('partials/pagination')
 

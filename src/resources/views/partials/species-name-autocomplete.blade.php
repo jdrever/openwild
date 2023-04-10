@@ -1,5 +1,7 @@
 @isset($results->records)
-@foreach ($results->records as $record)
-    <option value="{{$record}}">
-@endforeach
+@forelse ($results->records as $record)
+    <p class="autocomplete-item" onclick="autocomplete('{{$record}}')">{{$record}}</p>
+@empty
+    <p style="color:#d4d4d4;">No records match "{{$speciesName}}"</p>
+@endforelse
 @endisset
