@@ -13,7 +13,7 @@ speciesName.addEventListener('input', function (evt)
     let speciesGroup = document.querySelector('input[name="speciesGroup"]:checked').value;
     speciesGroup = speciesGroup[0].toUpperCase() + speciesGroup.slice(1)
 
-    updateUrl = '/species-autocomplete/' + userInput + '/' + speciesNameType + '/' + speciesGroup + '/';
+    updateUrl = window.location.href+'/species-autocomplete/' + userInput + '/' + speciesNameType + '/' + speciesGroup + '/';
 
     if (userInput.length > 0) {
         fetch(updateUrl).then(function (response) {
@@ -33,12 +33,12 @@ speciesName.addEventListener('input', function (evt)
     }
 });
 
-// Show the autocompletecontainer if clicked on the speciesName input box 
+// Show the autocompletecontainer if clicked on the speciesName input box
 speciesName.addEventListener('focus', function() {
     autocompleteContainer.style.display = "block";
 });
 
-// If user clicks on document other than the input or the autocompletecontainer, hide the container 
+// If user clicks on document other than the input or the autocompletecontainer, hide the container
 document.addEventListener("click", function(e) {
     if (e.target != autocompleteContainer && e.target != speciesName) {
         autocompleteContainer.style.display = "none";
@@ -64,9 +64,9 @@ speciesName.addEventListener("keydown", function(e) {
             if (autocompleteContainer.children.length != 0 && currentFocus > 0) {
                 autocompleteFocus(currentFocus, --currentFocus);
             }
-            
+
             break;
-    
+
         case "ArrowDown":
             if (autocompleteContainer.children.length != 0 && currentFocus < autocompleteContainer.children.length - 1) {
                 autocompleteFocus(currentFocus, ++currentFocus);
