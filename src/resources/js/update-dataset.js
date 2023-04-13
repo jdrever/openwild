@@ -1,14 +1,11 @@
 function listenForRefreshClicks(parent)
 {
     parent.querySelectorAll("[data-refresh='true']").forEach(item => {
-        console.log("data-refresher listener added");
         item.addEventListener('click', event => {
-            console.log("data-refresher checked");
             pageNumber=item.hasAttribute('data-page') ? item.dataset.page : 1;
-            console.log(item.tagName)
-            if (updateDataset(pageNumber) && item.tagName == "A") {
-                // Try to update dataset - if it was sucessful we don't want to follow link
-                // TODO - might break noJavascript href stuff?
+            // Try to update dataset and if item isn't an INPUT (the search selection checkboxes) then prevent default
+            if (updateDataset(pageNumber) && item.tagName != "INPUT") {
+                console.log("should be preventing default");
                 event.preventDefault();
             }
         })

@@ -204,10 +204,10 @@ class NbnQueryBuilder
      *
      * @return string
      */
-    public function getUnpagedQueryString(): string
+    public function getUnpagedQueryString($flimit = -1): string
     {
         $queryString = $this->getQueryString($this::BASE_URL.$this->searchType);
-        $queryString .= 'pageSize=0&flimit=-1';
+        $queryString .= 'pageSize=0&flimit=' . $flimit;
 
         return $queryString;
     }

@@ -38,7 +38,7 @@ document.addEventListener("click", function(e) {
 });
 
 function autocomplete(string) {
-    console.log(string + " clicked")
+    // Fill search box with autocomplete string
     siteName.value = string;
 }
 

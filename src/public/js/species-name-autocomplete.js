@@ -33,12 +33,12 @@ speciesName.addEventListener('input', function (evt)
     }
 });
 
-// Show the autocompletecontainer if clicked on the speciesName input box
+// Show the autocompletecontainer if clicked on the speciesName input box 
 speciesName.addEventListener('focus', function() {
     autocompleteContainer.style.display = "block";
 });
 
-// If user clicks on document other than the input or the autocompletecontainer, hide the container
+// If user clicks on document other than the input or the autocompletecontainer, hide the container 
 document.addEventListener("click", function(e) {
     if (e.target != autocompleteContainer && e.target != speciesName) {
         autocompleteContainer.style.display = "none";
@@ -46,10 +46,8 @@ document.addEventListener("click", function(e) {
 });
 
 function autocomplete(string) {
-    console.log(string + " clicked")
+    // Fill search box with autocomplete string
     speciesName.value = string;
-    // TODO - trigger speciesName changed? (so autocomplete list updates)
-    // TODO - focus on speciesName? (so user can hit enter to search)
 }
 
 currentFocus = -1;
@@ -64,9 +62,9 @@ speciesName.addEventListener("keydown", function(e) {
             if (autocompleteContainer.children.length != 0 && currentFocus > 0) {
                 autocompleteFocus(currentFocus, --currentFocus);
             }
-
+            
             break;
-
+    
         case "ArrowDown":
             if (autocompleteContainer.children.length != 0 && currentFocus < autocompleteContainer.children.length - 1) {
                 autocompleteFocus(currentFocus, ++currentFocus);

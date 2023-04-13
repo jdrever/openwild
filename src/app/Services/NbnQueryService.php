@@ -213,8 +213,7 @@ class NbnQueryService implements QueryService
         $nbnQuery = new NbnQueryBuilder(NbnQueryBuilder::OCCURRENCES_SEARCH);
         $nbnQuery->addWildcardLocationParameter($siteName);
         $nbnQuery->addSpeciesGroup('Both');
-        $nbnQuery->pageSize = 10;
-        $nbnQueryUrl = $nbnQuery->getUnpagedQueryString();
+        $nbnQueryUrl = $nbnQuery->getUnpagedQueryString(10);
         $nbnQueryResponse = $this->callNbnApi($nbnQueryUrl);
         $queryResult = $this->createSiteNameAutocompleteResult($nbnQueryResponse, $nbnQueryUrl);
 
