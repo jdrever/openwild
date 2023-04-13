@@ -13,7 +13,7 @@ speciesName.addEventListener('input', function (evt)
     let speciesGroup = document.querySelector('input[name="speciesGroup"]:checked').value;
     speciesGroup = speciesGroup[0].toUpperCase() + speciesGroup.slice(1)
 
-    updateUrl = window.location.href+'species-autocomplete/' + userInput + '/' + speciesNameType + '/' + speciesGroup + '/';
+    updateUrl = '/species-autocomplete/' + userInput + '/' + speciesNameType + '/' + speciesGroup;
 
     if (userInput.length > 0) {
         fetch(updateUrl).then(function (response) {
