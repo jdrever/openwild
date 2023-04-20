@@ -3,7 +3,7 @@
 
 <h2 class="text-start text-md-center">Search for @if (config('core.axiophytesOnly')) an Axiophyte @else a Species @endif in {{ config('core.region') }}</h2>
 
-<form action="/" action="post">
+<form action="{{ url()->current() }}" method="post">
 @csrf
 <div class="row mb-2">
 	<div id="search-container" class="col-lg-8 mx-auto" position="relative">
