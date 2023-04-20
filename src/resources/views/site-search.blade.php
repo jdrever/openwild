@@ -9,7 +9,7 @@
             <div class="input-group">
                 <input type="text" class="form-control" name="siteName" id="siteName" aria-describedby="search-help" placeholder="Enter a site" value="{{ $siteName }}"
                 autocomplete="off"/>
-                <button type="submit" class="btn btn-primary" onclick="return updateDataset(1);">List Sites</button>
+                <button type="submit" data-refresh="true" class="btn btn-primary">List Sites</button>
             </div>
             <div id="autocomplete-container"></div>
             <small id="search-help" class="form-text text-start text-md-center d-block">Enter all or part of a site name. Try something like "Aston".</small>
