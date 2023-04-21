@@ -10,10 +10,6 @@ div.container {
 	background-color: #fff;
 }
 
-.navbar {
-	background-color: #5b7f01;
-}
-
 .navbar-light .navbar-brand,
 .navbar-light .navbar-nav .nav-link {
 	color: #fff;
@@ -55,7 +51,7 @@ div#map {
 #autocomplete-container {
 	position: absolute;
 	border: 1px solid #d4d4d4;
-	background-color: #fff; 
+	background-color: #fff;
 	z-index: 99;
 }
 
@@ -63,7 +59,7 @@ div#map {
 	padding: 0.5rem;
 	margin: 0;
 	position: relative;
-	border-bottom: 1px solid #d4d4d4; 
+	border-bottom: 1px solid #d4d4d4;
 }
 
 .autocomplete-item {

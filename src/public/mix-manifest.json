@@ -1,8 +1,8 @@
 {
     "/js/bootstrap.js": "/js/bootstrap.js",
-    "/css/orkney-style.css": "/css/orkney-style.css",
     "/css/leaflet.css": "/css/leaflet.css",
-    "/css/bootstrap.css": "/css/bootstrap.css",
+    "/css/orkney-style.css": "/css/orkney-style.css",
+    "/css/shropshire-style.css": "/css/shropshire-style.css",
     "/js/site-name-autocomplete.js": "/js/site-name-autocomplete.js",
     "/js/species-name-autocomplete.js": "/js/species-name-autocomplete.js",
     "/js/update-dataset.js": "/js/update-dataset.js",
@@ -13,6 +13,5 @@
     "/js/wicket.js": "/js/wicket.js",
     "/js/bigr.min.umd.js": "/js/bigr.min.umd.js",
     "/js/d3.min.js": "/js/d3.min.js",
-    "/css/shropshire-style.css": "/css/shropshire-style.css",
     "/css/enhancements.css": "/css/enhancements.css"
 }

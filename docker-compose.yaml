@@ -17,6 +17,5 @@ services:
             - DB_DATABASE=question_board
             - DB_USERNAME=root
             - DB_PASSWORD=root
-        restart: unless-stopped
         ports: 
             - 8000:80
