@@ -1,6 +1,6 @@
 <x-layout>
 
-    <h1>Welcome to Wild Search!</h1>
-    <p>More information about the project coming soon!</p>
+    <h1>Welcome to Open Wild!</h1>
+    <p>Open Wild makes the biodiversity data more accessible in a variety of different contexts.</p>
 </x-layout>
 
