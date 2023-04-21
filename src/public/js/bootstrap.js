@@ -1771,6 +1771,18 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/scss/orkney.scss":
+/*!************************************!*\
+  !*** ./resources/scss/orkney.scss ***!
+  \************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
+
+/***/ }),
+
 /***/ "./node_modules/leaflet/dist/leaflet.css":
 /*!***********************************************!*\
   !*** ./node_modules/leaflet/dist/leaflet.css ***!
@@ -1882,6 +1894,7 @@ __webpack_require__.r(__webpack_exports__);
 /******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
 /******/ 		var installedChunks = {
 /******/ 			"/js/bootstrap": 0,
+/******/ 			"css/orkney-style": 0,
 /******/ 			"css/leaflet": 0,
 /******/ 			"css/bootstrap": 0
 /******/ 		};
@@ -1933,10 +1946,11 @@ __webpack_require__.r(__webpack_exports__);
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	__webpack_require__.O(undefined, ["css/leaflet","css/bootstrap"], () => (__webpack_require__("./node_modules/bootstrap/js/src/collapse.js")))
-/******/ 	__webpack_require__.O(undefined, ["css/leaflet","css/bootstrap"], () => (__webpack_require__("./node_modules/bootstrap/js/src/tab.js")))
-/******/ 	__webpack_require__.O(undefined, ["css/leaflet","css/bootstrap"], () => (__webpack_require__("./resources/scss/bootstrap.scss")))
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["css/leaflet","css/bootstrap"], () => (__webpack_require__("./node_modules/leaflet/dist/leaflet.css")))
+/******/ 	__webpack_require__.O(undefined, ["css/orkney-style","css/leaflet","css/bootstrap"], () => (__webpack_require__("./node_modules/bootstrap/js/src/collapse.js")))
+/******/ 	__webpack_require__.O(undefined, ["css/orkney-style","css/leaflet","css/bootstrap"], () => (__webpack_require__("./node_modules/bootstrap/js/src/tab.js")))
+/******/ 	__webpack_require__.O(undefined, ["css/orkney-style","css/leaflet","css/bootstrap"], () => (__webpack_require__("./resources/scss/bootstrap.scss")))
+/******/ 	__webpack_require__.O(undefined, ["css/orkney-style","css/leaflet","css/bootstrap"], () => (__webpack_require__("./resources/scss/orkney.scss")))
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["css/orkney-style","css/leaflet","css/bootstrap"], () => (__webpack_require__("./node_modules/leaflet/dist/leaflet.css")))
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()

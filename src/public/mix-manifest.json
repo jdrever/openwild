@@ -1,5 +1,6 @@
 {
     "/js/bootstrap.js": "/js/bootstrap.js",
+    "/css/orkney-style.css": "/css/orkney-style.css",
     "/css/leaflet.css": "/css/leaflet.css",
     "/css/bootstrap.css": "/css/bootstrap.css",
     "/js/site-name-autocomplete.js": "/js/site-name-autocomplete.js",
@@ -13,6 +14,5 @@
     "/js/bigr.min.umd.js": "/js/bigr.min.umd.js",
     "/js/d3.min.js": "/js/d3.min.js",
     "/css/shropshire-style.css": "/css/shropshire-style.css",
-    "/css/orkney-style.css": "/css/orkney-style.css",
     "/css/enhancements.css": "/css/enhancements.css"
 }
