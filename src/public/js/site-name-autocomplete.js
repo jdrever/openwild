@@ -1,1 +1,91 @@
-let siteName=document.getElementById("siteName"),autocompleteContainer=document.getElementById("autocomplete-container");function autocomplete(e){siteName.value=e}function autocompleteFocus(e,t){-1!=e&&autocompleteContainer.children[e].classList.remove("autocomplete-focus"),autocompleteContainer.children[t].classList.add("autocomplete-focus")}siteName.addEventListener("input",(function(e){const t=encodeURIComponent(this.value);updateUrl="/sites-autocomplete/"+t,t.length>0?fetch(updateUrl).then((function(e){return console.log("Searching for site "+t+"'"),e.text()})).then((function(e){autocompleteContainer.style.display="block",autocompleteContainer.innerHTML=e})).catch((function(e){console.warn("Something went wrong.",e)})):autocompleteContainer.innerHTML=""})),siteName.addEventListener("focus",(function(){autocompleteContainer.style.display="block"})),document.addEventListener("click",(function(e){e.target!=autocompleteContainer&&e.target!=siteName&&(autocompleteContainer.style.display="none")})),currentFocus=-1,siteName.addEventListener("keydown",(function(e){switch(currentFocus>=autocompleteContainer.children.length&&(currentFocus=autocompleteContainer.children.length-1),e.code){case"ArrowUp":0!=autocompleteContainer.children.length&&currentFocus>0&&autocompleteFocus(currentFocus,--currentFocus);break;case"ArrowDown":0!=autocompleteContainer.children.length&&currentFocus<autocompleteContainer.children.length-1&&autocompleteFocus(currentFocus,++currentFocus);break;case"Escape":siteName.blur(),autocompleteContainer.style.display="none";break;case"Enter":-1!=currentFocus&&(e.preventDefault(),autocomplete(autocompleteContainer.children[currentFocus].innerHTML),autocompleteContainer.children[currentFocus].classList.remove("autocomplete-focus"),currentFocus=-1)}}));
+let siteName = document.getElementById("siteName");
+let autocompleteContainer = document.getElementById("autocomplete-container");
+
+siteName.addEventListener('input', function (evt) {
+
+    const userInput = encodeURIComponent(this.value);
+
+    updateUrl = '/sites-autocomplete/' + userInput;
+
+    if (userInput.length > 0) {
+        fetch(updateUrl).then(function (response) {
+            // The API call was successful!
+            console.log("Searching for site "+userInput+"'");
+            return response.text();
+        }).then(function (html) {
+            autocompleteContainer.style.display = "block";
+            autocompleteContainer.innerHTML = html;
+        }).catch(function (err) {
+            // There was an error
+            console.warn('Something went wrong.', err);
+        });
+    } else {
+        // Hide/empty autocomplete dropdown if user clears siteName input
+        autocompleteContainer.innerHTML = "";
+    }
+});
+  
+// Show the autocompletecontainer if clicked on the siteName input box 
+siteName.addEventListener('focus', function() {
+    autocompleteContainer.style.display = "block";
+});
+
+// If user clicks on document other than the input or the autocompletecontainer, hide the container 
+document.addEventListener("click", function(e) {
+    if (e.target != autocompleteContainer && e.target != siteName) {
+        autocompleteContainer.style.display = "none";
+    }
+});
+
+function autocomplete(string) {
+    // Fill search box with autocomplete string
+    siteName.value = string;
+}
+
+currentFocus = -1;
+
+siteName.addEventListener("keydown", function(e) {
+    if (currentFocus >= autocompleteContainer.children.length) {
+        currentFocus = autocompleteContainer.children.length - 1;
+    }
+
+    switch (e.code) {
+        case "ArrowUp":
+            if (autocompleteContainer.children.length != 0 && currentFocus > 0) {
+                autocompleteFocus(currentFocus, --currentFocus);
+            }
+            
+            break;
+    
+        case "ArrowDown":
+            if (autocompleteContainer.children.length != 0 && currentFocus < autocompleteContainer.children.length - 1) {
+                autocompleteFocus(currentFocus, ++currentFocus);
+            }
+            break;
+
+        case "Escape":
+            siteName.blur();
+            autocompleteContainer.style.display = "none";
+            break;
+
+        case "Enter":
+            // if an autocomplete item is selected, capture input, enter that item (deselect it) so the user can enter again to search w it
+            if (currentFocus != -1) {
+                e.preventDefault();
+                autocomplete(autocompleteContainer.children[currentFocus].innerHTML);
+                autocompleteContainer.children[currentFocus].classList.remove("autocomplete-focus");
+                currentFocus = -1;
+            }
+            break;
+        default:
+            break;
+    }
+});
+
+function autocompleteFocus(prev, current) {
+    if (prev != -1) {
+        autocompleteContainer.children[prev].classList.remove("autocomplete-focus");
+    }
+
+    autocompleteContainer.children[current].classList.add("autocomplete-focus");
+}

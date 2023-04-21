@@ -1,1 +1,891 @@
-!function(t,e){"function"==typeof define&&define.amd?define((function(){return e()})):"undefined"!=typeof module&&"object"==typeof exports?module.exports=e():t.Wkt=e()}(this,(function(){var t,e,s;return this,t=function(t,e){return t.substring(0,e.length)===e},e=function(t,e){return t.substring(t.length-e.length)===e},(s=function(t){return t instanceof s?t:this instanceof s?void(this._wrapped=t):new s(t)}).delimiter=" ",s.isArray=function(t){return!(!t||t.constructor!==Array)},s.trim=function(s,i){for(i=i||" ";t(s,i);)s=s.substring(1);for(;e(s,i);)s=s.substring(0,s.length-1);return s},s.Wkt=function(t){this.delimiter=s.delimiter||" ",this.wrapVertices=!0,this.regExes={typeStr:/^\s*(\w+)\s*\(\s*(.*)\s*\)\s*$/,spaces:/\s+|\+/,numeric:/-*\d+(\.*\d+)?/,comma:/\s*,\s*/,parenComma:/\)\s*,\s*\(/,coord:/-*\d+\.*\d+ -*\d+\.*\d+/,doubleParenComma:/\)\s*\)\s*,\s*\(\s*\(/,ogcTypes:/^(multi)?(point|line|polygon|box)?(string)?$/i,crudeJson:/^{.*"(type|coordinates|geometries|features)":.*}$/},this._stripWhitespaceAndParens=function(t){return t.trim().replace(/^\(?(.*?)\)?$/,"$1")},this.components=void 0,t&&"string"==typeof t?this.read(t):t&&void 0!==typeof t&&this.fromObject(t)},s.Wkt.prototype.isCollection=function(){switch(this.type.slice(0,5)){case"multi":case"polyg":return!0;default:return!1}},s.Wkt.prototype.sameCoords=function(t,e){return t.x===e.x&&t.y===e.y},s.Wkt.prototype.fromObject=function(t){var e;return e=t.hasOwnProperty("type")&&t.hasOwnProperty("coordinates")?this.fromJson(t):this.deconstruct.call(this,t),this.components=e.components,this.isRectangle=e.isRectangle||!1,this.type=e.type,this},s.Wkt.prototype.toObject=function(t){var e=this.construct[this.type].call(this,t);return"object"!=typeof e||s.isArray(e)||(e.properties=this.properties),e},s.Wkt.prototype.toString=function(t){return this.write()},s.Wkt.prototype.fromJson=function(t){var e,i,n,o,r,p;if(this.type=t.type.toLowerCase(),this.components=[],t.hasOwnProperty("geometry"))return this.fromJson(t.geometry),this.properties=t.properties,this;if(o=t.coordinates,s.isArray(o[0])){for(e in o)if(o.hasOwnProperty(e))if(s.isArray(o[e][0])){for(i in p=[],o[e])if(o[e].hasOwnProperty(i))if(s.isArray(o[e][i][0])){for(n in r=[],o[e][i])o[e][i].hasOwnProperty(n)&&r.push({x:o[e][i][n][0],y:o[e][i][n][1]});p.push(r)}else p.push({x:o[e][i][0],y:o[e][i][1]});this.components.push(p)}else"multipoint"===this.type?this.components.push([{x:o[e][0],y:o[e][1]}]):this.components.push({x:o[e][0],y:o[e][1]})}else this.components.push({x:o[0],y:o[1]});return this},s.Wkt.prototype.toJson=function(){var t,e,i,n,o,r,p;if(t=this.components,e={coordinates:[],type:function(){var t,e,s;for(t in s=[],e=this.regExes.ogcTypes.exec(this.type).slice(1))e.hasOwnProperty(t)&&void 0!==e[t]&&s.push(e[t].toLowerCase().slice(0,1).toUpperCase()+e[t].toLowerCase().slice(1));return s}.call(this).join("")},"box"===this.type.toLowerCase()){for(i in e.type="Polygon",e.bbox=[],t)t.hasOwnProperty(i)&&(e.bbox=e.bbox.concat([t[i].x,t[i].y]));return e.coordinates=[[[t[0].x,t[0].y],[t[0].x,t[1].y],[t[1].x,t[1].y],[t[1].x,t[0].y],[t[0].x,t[0].y]]],e}for(i in t)if(t.hasOwnProperty(i))if(s.isArray(t[i])){for(n in p=[],t[i])if(t[i].hasOwnProperty(n))if(s.isArray(t[i][n])){for(o in r=[],t[i][n])t[i][n].hasOwnProperty(o)&&r.push([t[i][n][o].x,t[i][n][o].y]);p.push(r)}else t[i].length>1?p.push([t[i][n].x,t[i][n].y]):p=p.concat([t[i][n].x,t[i][n].y]);e.coordinates.push(p)}else t.length>1?e.coordinates.push([t[i].x,t[i].y]):e.coordinates=e.coordinates.concat([t[i].x,t[i].y]);return e},s.Wkt.prototype.merge=function(t){var e=this.type.slice(0,5);if(this.type!==t.type&&this.type.slice(5,this.type.length)!==t.type)throw TypeError("The input geometry types must agree or the calling this.Wkt.Wkt instance must be a multigeometry of the other");switch(e){case"point":this.components=[this.components.concat(t.components)];break;case"multi":this.components=this.components.concat("multi"===t.type.slice(0,5)?t.components:[t.components]);break;default:this.components=[this.components,t.components]}return"multi"!==e&&(this.type="multi"+this.type),this},s.Wkt.prototype.read=function(t){var e;if(e=this.regExes.typeStr.exec(t))this.type=e[1].toLowerCase(),this.base=e[2],this.ingest[this.type]&&(this.components=this.ingest[this.type].apply(this,[this.base]));else{if(!this.regExes.crudeJson.test(t))throw console.log("Invalid WKT string provided to read()"),{name:"WKTError",message:"Invalid WKT string provided to read()"};if("object"!=typeof JSON||"function"!=typeof JSON.parse)throw console.log("JSON.parse() is not available; cannot parse GeoJSON strings"),{name:"JSONError",message:"JSON.parse() is not available; cannot parse GeoJSON strings"};this.fromJson(JSON.parse(t))}return this},s.Wkt.prototype.write=function(t){var e,s,i;for(t=t||this.components,(s=[]).push(this.type.toUpperCase()+"("),e=0;e<t.length;e+=1){if(this.isCollection()&&e>0&&s.push(","),!this.extract[this.type])return null;i=this.extract[this.type].apply(this,[t[e]]),this.isCollection()&&"multipoint"!==this.type?s.push("("+i+")"):(s.push(i),e!==t.length-1&&"multipoint"!==this.type&&s.push(","))}return s.push(")"),s.join("")},s.Wkt.prototype.extract={point:function(t){return String(t.x)+this.delimiter+String(t.y)},multipoint:function(t){var e,s,i=[];for(e=0;e<t.length;e+=1)s=this.extract.point.apply(this,[t[e]]),this.wrapVertices&&(s="("+s+")"),i.push(s);return i.join(",")},linestring:function(t){return this.extract.point.apply(this,[t])},multilinestring:function(t){var e,s=[];if(t.length)for(e=0;e<t.length;e+=1)s.push(this.extract.linestring.apply(this,[t[e]]));else s.push(this.extract.point.apply(this,[t]));return s.join(",")},polygon:function(t){return this.extract.multilinestring.apply(this,[t])},multipolygon:function(t){var e,s=[];for(e=0;e<t.length;e+=1)s.push("("+this.extract.polygon.apply(this,[t[e]])+")");return s.join(",")},box:function(t){return this.extract.linestring.apply(this,[t])},geometrycollection:function(t){console.log("The geometrycollection WKT type is not yet supported.")}},s.Wkt.prototype.ingest={point:function(t){var e=s.trim(t).split(this.regExes.spaces);return[{x:parseFloat(this.regExes.numeric.exec(e[0])[0]),y:parseFloat(this.regExes.numeric.exec(e[1])[0])}]},multipoint:function(t){var e,i,n;for(i=[],n=s.trim(t).split(this.regExes.comma),e=0;e<n.length;e+=1)i.push(this.ingest.point.apply(this,[n[e]]));return i},linestring:function(t){var e,s,i;for(s=this.ingest.multipoint.apply(this,[t]),i=[],e=0;e<s.length;e+=1)i=i.concat(s[e]);return i},multilinestring:function(t){var e,i,n,o;for(i=[],1===(o=s.trim(t).split(this.regExes.doubleParenComma)).length&&(o=s.trim(t).split(this.regExes.parenComma)),e=0;e<o.length;e+=1)n=this._stripWhitespaceAndParens(o[e]),i.push(this.ingest.linestring.apply(this,[n]));return i},polygon:function(t){var e,i,n,o,r,p;for(p=s.trim(t).split(this.regExes.parenComma),n=[],e=0;e<p.length;e+=1){for(r=this._stripWhitespaceAndParens(p[e]).split(this.regExes.comma),o=[],i=0;i<r.length;i+=1){var h=r[i].split(this.regExes.spaces);if(h.length>2&&(h=h.filter((function(t){return""!=t}))),2===h.length){var a=h[0],c=h[1];o.push({x:parseFloat(a),y:parseFloat(c)})}}n.push(o)}return n},box:function(t){var e,s,i;for(s=this.ingest.multipoint.apply(this,[t]),i=[],e=0;e<s.length;e+=1)i=i.concat(s[e]);return i},multipolygon:function(t){var e,i,n,o;for(i=[],o=s.trim(t).split(this.regExes.doubleParenComma),e=0;e<o.length;e+=1)n=this._stripWhitespaceAndParens(o[e]),i.push(this.ingest.polygon.apply(this,[n]));return i},geometrycollection:function(t){console.log("The geometrycollection WKT type is not yet supported.")}},s}));
+/** @license
+ *
+ *  Copyright (C) 2012 K. Arthur Endsley (kaendsle@mtu.edu)
+ *  Michigan Tech Research Institute (MTRI)
+ *  3600 Green Court, Suite 100, Ann Arbor, MI, 48105
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+(function (root, factory) {
+
+    if (typeof define === "function" && define.amd) {
+        // AMD (+ global for extensions)
+        define(function () {
+            return factory();
+        });
+    } else if (typeof module !== 'undefined' && typeof exports === "object") {
+        // CommonJS
+        module.exports = factory();
+    } else {
+        // Browser
+        root.Wkt = factory();
+    }
+}(this, function () {
+
+
+    var beginsWith, endsWith, root, Wkt;
+
+    // Establish the root object, window in the browser, or exports on the server
+    root = this;
+
+    /**
+     * @desc The Wkt namespace.
+     * @property    {String}    delimiter   - The default delimiter for separating components of atomic geometry (coordinates)
+     * @namespace
+     * @global
+     */
+    Wkt = function (obj) {
+        if (obj instanceof Wkt) return obj;
+        if (!(this instanceof Wkt)) return new Wkt(obj);
+        this._wrapped = obj;
+    };
+
+
+
+    /**
+     * Returns true if the substring is found at the beginning of the string.
+     * @param   str {String}    The String to search
+     * @param   sub {String}    The substring of interest
+     * @return      {Boolean}
+     * @private
+     */
+    beginsWith = function (str, sub) {
+        return str.substring(0, sub.length) === sub;
+    };
+
+    /**
+     * Returns true if the substring is found at the end of the string.
+     * @param   str {String}    The String to search
+     * @param   sub {String}    The substring of interest
+     * @return      {Boolean}
+     * @private
+     */
+    endsWith = function (str, sub) {
+        return str.substring(str.length - sub.length) === sub;
+    };
+
+    /**
+     * The default delimiter for separating components of atomic geometry (coordinates)
+     * @ignore
+     */
+    Wkt.delimiter = ' ';
+
+    /**
+     * Determines whether or not the passed Object is an Array.
+     * @param   obj {Object}    The Object in question
+     * @return      {Boolean}
+     * @member Wkt.isArray
+     * @method
+     */
+    Wkt.isArray = function (obj) {
+        return !!(obj && obj.constructor === Array);
+    };
+
+    /**
+     * Removes given character String(s) from a String.
+     * @param   str {String}    The String to search
+     * @param   sub {String}    The String character(s) to trim
+     * @return      {String}    The trimmed string
+     * @member Wkt.trim
+     * @method
+     */
+    Wkt.trim = function (str, sub) {
+        sub = sub || ' '; // Defaults to trimming spaces
+        // Trim beginning spaces
+        while (beginsWith(str, sub)) {
+            str = str.substring(1);
+        }
+        // Trim ending spaces
+        while (endsWith(str, sub)) {
+            str = str.substring(0, str.length - 1);
+        }
+        return str;
+    };
+
+    /**
+     * An object for reading WKT strings and writing geographic features
+     * @constructor this.Wkt.Wkt
+     * @param   initializer {String}    An optional WKT string for immediate read
+     * @property            {Array}     components      - Holder for atomic geometry objects (internal representation of geometric components)
+     * @property            {String}    delimiter       - The default delimiter for separating components of atomic geometry (coordinates)
+     * @property            {Object}    regExes         - Some regular expressions copied from OpenLayers.Format.WKT.js
+     * @property            {String}    type            - The Well-Known Text name (e.g. 'point') of the geometry
+     * @property            {Boolean}   wrapVerticies   - True to wrap vertices in MULTIPOINT geometries; If true: MULTIPOINT((30 10),(10 30),(40 40)); If false: MULTIPOINT(30 10,10 30,40 40)
+     * @return              {this.Wkt.Wkt}
+     * @memberof Wkt
+     */
+    Wkt.Wkt = function (initializer) {
+
+        /**
+         * The default delimiter between X and Y coordinates.
+         * @ignore
+         */
+        this.delimiter = Wkt.delimiter || ' ';
+
+        /**
+         * Configuration parameter for controlling how Wicket seralizes
+         * MULTIPOINT strings. Examples; both are valid WKT:
+         * If true: MULTIPOINT((30 10),(10 30),(40 40))
+         * If false: MULTIPOINT(30 10,10 30,40 40)
+         * @ignore
+         */
+        this.wrapVertices = true;
+
+        /**
+         * Some regular expressions copied from OpenLayers.Format.WKT.js
+         * @ignore
+         */
+        this.regExes = {
+            'typeStr': /^\s*(\w+)\s*\(\s*(.*)\s*\)\s*$/,
+            'spaces': /\s+|\+/, // Matches the '+' or the empty space
+            'numeric': /-*\d+(\.*\d+)?/,
+            'comma': /\s*,\s*/,
+            'parenComma': /\)\s*,\s*\(/,
+            'coord': /-*\d+\.*\d+ -*\d+\.*\d+/, // e.g. "24 -14"
+            'doubleParenComma': /\)\s*\)\s*,\s*\(\s*\(/,
+            'ogcTypes': /^(multi)?(point|line|polygon|box)?(string)?$/i, // Captures e.g. "Multi","Line","String"
+            'crudeJson': /^{.*"(type|coordinates|geometries|features)":.*}$/ // Attempts to recognize JSON strings
+        };
+
+        /**
+         * Strip any whitespace and parens from front and back.
+         * This is the equivalent of s/^\s*\(?(.*)\)?\s*$/$1/ but without the risk of catastrophic backtracking.
+         * @param   str {String}
+         */
+        this._stripWhitespaceAndParens = function (fullStr) {
+            var trimmed = fullStr.trim();
+            var noParens = trimmed.replace(/^\(?(.*?)\)?$/, '$1');
+            return noParens;
+        };
+
+        /**
+         * The internal representation of geometry--the "components" of geometry.
+         * @ignore
+         */
+        this.components = undefined;
+
+        // An initial WKT string may be provided
+        if (initializer && typeof initializer === 'string') {
+            this.read(initializer);
+        } else if (initializer && typeof initializer !== undefined) {
+            this.fromObject(initializer);
+        }
+
+    };
+
+
+
+    /**
+     * Returns true if the internal geometry is a collection of geometries.
+     * @return  {Boolean}   Returns true when it is a collection
+     * @memberof this.Wkt.Wkt
+     * @method
+     */
+    Wkt.Wkt.prototype.isCollection = function () {
+        switch (this.type.slice(0, 5)) {
+            case 'multi':
+                // Trivial; any multi-geometry is a collection
+                return true;
+            case 'polyg':
+                // Polygons with holes are "collections" of rings
+                return true;
+            default:
+                // Any other geometry is not a collection
+                return false;
+        }
+    };
+
+    /**
+     * Compares two x,y coordinates for equality.
+     * @param   a   {Object}    An object with x and y properties
+     * @param   b   {Object}    An object with x and y properties
+     * @return      {Boolean}
+     * @memberof this.Wkt.Wkt
+     * @method
+     */
+    Wkt.Wkt.prototype.sameCoords = function (a, b) {
+        return (a.x === b.x && a.y === b.y);
+    };
+
+    /**
+     * Sets internal geometry (components) from framework geometry (e.g.
+     * Google Polygon objects or google.maps.Polygon).
+     * @param   obj {Object}    The framework-dependent geometry representation
+     * @return      {this.Wkt.Wkt}   The object itself
+     * @memberof this.Wkt.Wkt
+     * @method
+     */
+    Wkt.Wkt.prototype.fromObject = function (obj) {
+        var result;
+
+        if (obj.hasOwnProperty('type') && obj.hasOwnProperty('coordinates')) {
+            result = this.fromJson(obj);
+        } else {
+            result = this.deconstruct.call(this, obj);
+        }
+
+        this.components = result.components;
+        this.isRectangle = result.isRectangle || false;
+        this.type = result.type;
+        return this;
+    };
+
+    /**
+     * Creates external geometry objects based on a plug-in framework's
+     * construction methods and available geometry classes.
+     * @param   config  {Object}    An optional framework-dependent properties specification
+     * @return          {Object}    The framework-dependent geometry representation
+     * @memberof this.Wkt.Wkt
+     * @method
+     */
+    Wkt.Wkt.prototype.toObject = function (config) {
+        var obj = this.construct[this.type].call(this, config);
+        // Don't assign the "properties" property to an Array
+        if (typeof obj === 'object' && !Wkt.isArray(obj)) {
+            obj.properties = this.properties;
+        }
+        return obj;
+    };
+
+    /**
+     * Returns the WKT string representation; the same as the write() method.
+     * @memberof this.Wkt.Wkt
+     * @method
+     */
+    Wkt.Wkt.prototype.toString = function (config) {
+        return this.write();
+    };
+
+    /**
+     * Parses a JSON representation as an Object.
+     * @param	obj	{Object}	An Object with the GeoJSON schema
+     * @return	{this.Wkt.Wkt}	The object itself
+     * @memberof this.Wkt.Wkt
+     * @method
+     */
+    Wkt.Wkt.prototype.fromJson = function (obj) {
+        var i, j, k, coords, iring, oring;
+
+        this.type = obj.type.toLowerCase();
+        this.components = [];
+        if (obj.hasOwnProperty('geometry')) { //Feature
+            this.fromJson(obj.geometry);
+            this.properties = obj.properties;
+            return this;
+        }
+        coords = obj.coordinates;
+
+        if (!Wkt.isArray(coords[0])) { // Point
+            this.components.push({
+                x: coords[0],
+                y: coords[1]
+            });
+
+        } else {
+
+            for (i in coords) {
+                if (coords.hasOwnProperty(i)) {
+
+                    if (!Wkt.isArray(coords[i][0])) { // LineString
+
+                        if (this.type === 'multipoint') { // MultiPoint
+                            this.components.push([{
+                                x: coords[i][0],
+                                y: coords[i][1]
+                            }]);
+
+                        } else {
+                            this.components.push({
+                                x: coords[i][0],
+                                y: coords[i][1]
+                            });
+
+                        }
+
+                    } else {
+
+                        oring = [];
+                        for (j in coords[i]) {
+                            if (coords[i].hasOwnProperty(j)) {
+
+                                if (!Wkt.isArray(coords[i][j][0])) {
+                                    oring.push({
+                                        x: coords[i][j][0],
+                                        y: coords[i][j][1]
+                                    });
+
+                                } else {
+
+                                    iring = [];
+                                    for (k in coords[i][j]) {
+                                        if (coords[i][j].hasOwnProperty(k)) {
+
+                                            iring.push({
+                                                x: coords[i][j][k][0],
+                                                y: coords[i][j][k][1]
+                                            });
+
+                                        }
+                                    }
+
+                                    oring.push(iring);
+
+                                }
+
+                            }
+                        }
+
+                        this.components.push(oring);
+                    }
+                }
+            }
+
+        }
+
+        return this;
+    };
+
+    /**
+     * Creates a JSON representation, with the GeoJSON schema, of the geometry.
+     * @return    {Object}    The corresponding GeoJSON representation
+     * @memberof this.Wkt.Wkt
+     * @method
+     */
+    Wkt.Wkt.prototype.toJson = function () {
+        var cs, json, i, j, k, ring, rings;
+
+        cs = this.components;
+        json = {
+            coordinates: [],
+            type: (function () {
+                var i, type, s;
+
+                type = this.regExes.ogcTypes.exec(this.type).slice(1);
+                s = [];
+
+                for (i in type) {
+                    if (type.hasOwnProperty(i)) {
+                        if (type[i] !== undefined) {
+                            s.push(type[i].toLowerCase().slice(0, 1).toUpperCase() + type[i].toLowerCase().slice(1));
+                        }
+                    }
+                }
+
+                return s;
+            }.call(this)).join('')
+        }
+
+        // Wkt BOX type gets a special bbox property in GeoJSON
+        if (this.type.toLowerCase() === 'box') {
+            json.type = 'Polygon';
+            json.bbox = [];
+
+            for (i in cs) {
+                if (cs.hasOwnProperty(i)) {
+                    json.bbox = json.bbox.concat([cs[i].x, cs[i].y]);
+                }
+            }
+
+            json.coordinates = [
+                [
+                    [cs[0].x, cs[0].y],
+                    [cs[0].x, cs[1].y],
+                    [cs[1].x, cs[1].y],
+                    [cs[1].x, cs[0].y],
+                    [cs[0].x, cs[0].y]
+                ]
+            ];
+
+            return json;
+        }
+
+        // For the coordinates of most simple features
+        for (i in cs) {
+            if (cs.hasOwnProperty(i)) {
+
+                // For those nested structures
+                if (Wkt.isArray(cs[i])) {
+                    rings = [];
+
+                    for (j in cs[i]) {
+                        if (cs[i].hasOwnProperty(j)) {
+
+                            if (Wkt.isArray(cs[i][j])) { // MULTIPOLYGONS
+                                ring = [];
+
+                                for (k in cs[i][j]) {
+                                    if (cs[i][j].hasOwnProperty(k)) {
+                                        ring.push([cs[i][j][k].x, cs[i][j][k].y]);
+                                    }
+                                }
+
+                                rings.push(ring);
+
+                            } else { // POLYGONS and MULTILINESTRINGS
+
+                                if (cs[i].length > 1) {
+                                    rings.push([cs[i][j].x, cs[i][j].y]);
+
+                                } else { // MULTIPOINTS
+                                    rings = rings.concat([cs[i][j].x, cs[i][j].y]);
+                                }
+                            }
+                        }
+                    }
+
+                    json.coordinates.push(rings);
+
+                } else {
+                    if (cs.length > 1) { // For LINESTRING type
+                        json.coordinates.push([cs[i].x, cs[i].y]);
+
+                    } else { // For POINT type
+                        json.coordinates = json.coordinates.concat([cs[i].x, cs[i].y]);
+                    }
+                }
+
+            }
+        }
+
+        return json;
+    };
+
+    /**
+     * Absorbs the geometry of another this.Wkt.Wkt instance, merging it with its own,
+     * creating a collection (MULTI-geometry) based on their types, which must agree.
+     * For example, creates a MULTIPOLYGON from a POLYGON type merged with another
+     * POLYGON type, or adds a POLYGON instance to a MULTIPOLYGON instance.
+     * @param   wkt {String}    A Wkt.Wkt object
+     * @return	{this.Wkt.Wkt}	The object itself
+     * @memberof this.Wkt.Wkt
+     * @method
+     */
+    Wkt.Wkt.prototype.merge = function (wkt) {
+        var prefix = this.type.slice(0, 5);
+
+        if (this.type !== wkt.type) {
+            if (this.type.slice(5, this.type.length) !== wkt.type) {
+                throw TypeError('The input geometry types must agree or the calling this.Wkt.Wkt instance must be a multigeometry of the other');
+            }
+        }
+
+        switch (prefix) {
+
+            case 'point':
+                this.components = [this.components.concat(wkt.components)];
+                break;
+
+            case 'multi':
+                this.components = this.components.concat((wkt.type.slice(0, 5) === 'multi') ? wkt.components : [wkt.components]);
+                break;
+
+            default:
+                this.components = [
+                    this.components,
+                    wkt.components
+                ];
+                break;
+
+        }
+
+        if (prefix !== 'multi') {
+            this.type = 'multi' + this.type;
+        }
+        return this;
+    };
+
+    /**
+     * Reads a WKT string, validating and incorporating it.
+     * @param   str {String}    A WKT or GeoJSON string
+     * @return	{this.Wkt.Wkt}	The object itself
+     * @memberof this.Wkt.Wkt
+     * @method
+     */
+    Wkt.Wkt.prototype.read = function (str) {
+        var matches;
+        matches = this.regExes.typeStr.exec(str);
+        if (matches) {
+            this.type = matches[1].toLowerCase();
+            this.base = matches[2];
+            if (this.ingest[this.type]) {
+                this.components = this.ingest[this.type].apply(this, [this.base]);
+            }
+
+        } else {
+            if (this.regExes.crudeJson.test(str)) {
+                if (typeof JSON === 'object' && typeof JSON.parse === 'function') {
+                    this.fromJson(JSON.parse(str));
+
+                } else {
+                    console.log('JSON.parse() is not available; cannot parse GeoJSON strings');
+                    throw {
+                        name: 'JSONError',
+                        message: 'JSON.parse() is not available; cannot parse GeoJSON strings'
+                    };
+                }
+
+            } else {
+                console.log('Invalid WKT string provided to read()');
+                throw {
+                    name: 'WKTError',
+                    message: 'Invalid WKT string provided to read()'
+                };
+            }
+        }
+
+        return this;
+    }; // eo readWkt
+
+    /**
+     * Writes a WKT string.
+     * @param   components  {Array}     An Array of internal geometry objects
+     * @return              {String}    The corresponding WKT representation
+     * @memberof this.Wkt.Wkt
+     * @method
+     */
+    Wkt.Wkt.prototype.write = function (components) {
+        var i, pieces, data;
+
+        components = components || this.components;
+
+        pieces = [];
+
+        pieces.push(this.type.toUpperCase() + '(');
+
+        for (i = 0; i < components.length; i += 1) {
+            if (this.isCollection() && i > 0) {
+                pieces.push(',');
+            }
+
+            // There should be an extract function for the named type
+            if (!this.extract[this.type]) {
+                return null;
+            }
+
+            data = this.extract[this.type].apply(this, [components[i]]);
+            if (this.isCollection() && this.type !== 'multipoint') {
+                pieces.push('(' + data + ')');
+
+            } else {
+                pieces.push(data);
+
+                // If not at the end of the components, add a comma
+                if (i !== (components.length - 1) && this.type !== 'multipoint') {
+                    pieces.push(',');
+                }
+
+            }
+        }
+
+        pieces.push(')');
+
+        return pieces.join('');
+    };
+
+    /**
+     * This object contains functions as property names that extract WKT
+     * strings from the internal representation.
+     * @memberof this.Wkt.Wkt
+     * @namespace this.Wkt.Wkt.extract
+     * @instance
+     */
+    Wkt.Wkt.prototype.extract = {
+        /**
+         * Return a WKT string representing atomic (point) geometry
+         * @param   point   {Object}    An object with x and y properties
+         * @return          {String}    The WKT representation
+         * @memberof this.Wkt.Wkt.extract
+         * @instance
+         */
+        point: function (point) {
+            return String(point.x) + this.delimiter + String(point.y);
+        },
+
+        /**
+         * Return a WKT string representing multiple atoms (points)
+         * @param   multipoint  {Array}     Multiple x-and-y objects
+         * @return              {String}    The WKT representation
+         * @memberof this.Wkt.Wkt.extract
+         * @instance
+         */
+        multipoint: function (multipoint) {
+            var i, parts = [],
+                s;
+
+            for (i = 0; i < multipoint.length; i += 1) {
+                s = this.extract.point.apply(this, [multipoint[i]]);
+
+                if (this.wrapVertices) {
+                    s = '(' + s + ')';
+                }
+
+                parts.push(s);
+            }
+
+            return parts.join(',');
+        },
+
+        /**
+         * Return a WKT string representing a chain (linestring) of atoms
+         * @param   linestring  {Array}     Multiple x-and-y objects
+         * @return              {String}    The WKT representation
+         * @memberof this.Wkt.Wkt.extract
+         * @instance
+         */
+        linestring: function (linestring) {
+            // Extraction of linestrings is the same as for points
+            return this.extract.point.apply(this, [linestring]);
+        },
+
+        /**
+         * Return a WKT string representing multiple chains (multilinestring) of atoms
+         * @param   multilinestring {Array}     Multiple of multiple x-and-y objects
+         * @return                  {String}    The WKT representation
+         * @memberof this.Wkt.Wkt.extract
+         * @instance
+         */
+        multilinestring: function (multilinestring) {
+            var i, parts = [];
+
+            if (multilinestring.length) {
+                for (i = 0; i < multilinestring.length; i += 1) {
+                    parts.push(this.extract.linestring.apply(this, [multilinestring[i]]));
+                }
+            } else {
+                parts.push(this.extract.point.apply(this, [multilinestring]));
+            }
+
+            return parts.join(',');
+        },
+
+        /**
+         * Return a WKT string representing multiple atoms in closed series (polygon)
+         * @param   polygon {Array}     Collection of ordered x-and-y objects
+         * @return          {String}    The WKT representation
+         * @memberof this.Wkt.Wkt.extract
+         * @instance
+         */
+        polygon: function (polygon) {
+            // Extraction of polygons is the same as for multilinestrings
+            return this.extract.multilinestring.apply(this, [polygon]);
+        },
+
+        /**
+         * Return a WKT string representing multiple closed series (multipolygons) of multiple atoms
+         * @param   multipolygon    {Array}     Collection of ordered x-and-y objects
+         * @return                  {String}    The WKT representation
+         * @memberof this.Wkt.Wkt.extract
+         * @instance
+         */
+        multipolygon: function (multipolygon) {
+            var i, parts = [];
+            for (i = 0; i < multipolygon.length; i += 1) {
+                parts.push('(' + this.extract.polygon.apply(this, [multipolygon[i]]) + ')');
+            }
+            return parts.join(',');
+        },
+
+        /**
+         * Return a WKT string representing a 2DBox
+         * @param   multipolygon    {Array}     Collection of ordered x-and-y objects
+         * @return                  {String}    The WKT representation
+         * @memberof this.Wkt.Wkt.extract
+         * @instance
+         */
+        box: function (box) {
+            return this.extract.linestring.apply(this, [box]);
+        },
+
+        geometrycollection: function (str) {
+            console.log('The geometrycollection WKT type is not yet supported.');
+        }
+    };
+
+    /**
+     * This object contains functions as property names that ingest WKT
+     * strings into the internal representation.
+     * @memberof this.Wkt.Wkt
+     * @namespace this.Wkt.Wkt.ingest
+     * @instance
+     */
+    Wkt.Wkt.prototype.ingest = {
+
+        /**
+         * Return point feature given a point WKT fragment.
+         * @param   str {String}    A WKT fragment representing the point
+         * @memberof this.Wkt.Wkt.ingest
+         * @instance
+         */
+        point: function (str) {
+            var coords = Wkt.trim(str).split(this.regExes.spaces);
+            // In case a parenthetical group of coordinates is passed...
+            return [{ // ...Search for numeric substrings
+                x: parseFloat(this.regExes.numeric.exec(coords[0])[0]),
+                y: parseFloat(this.regExes.numeric.exec(coords[1])[0])
+            }];
+        },
+
+        /**
+         * Return a multipoint feature given a multipoint WKT fragment.
+         * @param   str {String}    A WKT fragment representing the multipoint
+         * @memberof this.Wkt.Wkt.ingest
+         * @instance
+         */
+        multipoint: function (str) {
+            var i, components, points;
+            components = [];
+            points = Wkt.trim(str).split(this.regExes.comma);
+            for (i = 0; i < points.length; i += 1) {
+                components.push(this.ingest.point.apply(this, [points[i]]));
+            }
+            return components;
+        },
+
+        /**
+         * Return a linestring feature given a linestring WKT fragment.
+         * @param   str {String}    A WKT fragment representing the linestring
+         * @memberof this.Wkt.Wkt.ingest
+         * @instance
+         */
+        linestring: function (str) {
+            var i, multipoints, components;
+
+            // In our x-and-y representation of components, parsing
+            //  multipoints is the same as parsing linestrings
+            multipoints = this.ingest.multipoint.apply(this, [str]);
+
+            // However, the points need to be joined
+            components = [];
+            for (i = 0; i < multipoints.length; i += 1) {
+                components = components.concat(multipoints[i]);
+            }
+            return components;
+        },
+
+        /**
+         * Return a multilinestring feature given a multilinestring WKT fragment.
+         * @param   str {String}    A WKT fragment representing the multilinestring
+         * @memberof this.Wkt.Wkt.ingest
+         * @instance
+         */
+        multilinestring: function (str) {
+            var i, components, line, lines;
+            components = [];
+
+            lines = Wkt.trim(str).split(this.regExes.doubleParenComma);
+            if (lines.length === 1) { // If that didn't work...
+                lines = Wkt.trim(str).split(this.regExes.parenComma);
+            }
+
+            for (i = 0; i < lines.length; i += 1) {
+                line = this._stripWhitespaceAndParens(lines[i]);
+                components.push(this.ingest.linestring.apply(this, [line]));
+            }
+
+            return components;
+        },
+
+        /**
+         * Return a polygon feature given a polygon WKT fragment.
+         * @param   str {String}    A WKT fragment representing the polygon
+         * @memberof this.Wkt.Wkt.ingest
+         * @instance
+         */
+        polygon: function (str) {
+            var i, j, components, subcomponents, ring, rings;
+            rings = Wkt.trim(str).split(this.regExes.parenComma);
+            components = []; // Holds one or more rings
+            for (i = 0; i < rings.length; i += 1) {
+                ring = this._stripWhitespaceAndParens(rings[i]).split(this.regExes.comma);
+                subcomponents = []; // Holds the outer ring and any inner rings (holes)
+                for (j = 0; j < ring.length; j += 1) {
+                    // Split on the empty space or '+' character (between coordinates)
+                    var split = ring[j].split(this.regExes.spaces);
+                    if (split.length > 2) {
+                        //remove the elements which are blanks
+                        split = split.filter(function (n) {
+                            return n != ""
+                        });
+                    }
+                    if (split.length === 2) {
+                        var x_cord = split[0];
+                        var y_cord = split[1];
+
+                        //now push
+                        subcomponents.push({
+                            x: parseFloat(x_cord),
+                            y: parseFloat(y_cord)
+                        });
+                    }
+                }
+                components.push(subcomponents);
+            }
+            return components;
+        },
+
+        /**
+         * Return box vertices (which would become the Rectangle bounds) given a Box WKT fragment.
+         * @param   str {String}    A WKT fragment representing the box
+         * @memberof this.Wkt.Wkt.ingest
+         * @instance
+         */
+        box: function (str) {
+            var i, multipoints, components;
+
+            // In our x-and-y representation of components, parsing
+            //  multipoints is the same as parsing linestrings
+            multipoints = this.ingest.multipoint.apply(this, [str]);
+
+            // However, the points need to be joined
+            components = [];
+            for (i = 0; i < multipoints.length; i += 1) {
+                components = components.concat(multipoints[i]);
+            }
+
+            return components;
+        },
+
+        /**
+         * Return a multipolygon feature given a multipolygon WKT fragment.
+         * @param   str {String}    A WKT fragment representing the multipolygon
+         * @memberof this.Wkt.Wkt.ingest
+         * @instance
+         */
+        multipolygon: function (str) {
+            var i, components, polygon, polygons;
+            components = [];
+            polygons = Wkt.trim(str).split(this.regExes.doubleParenComma);
+            for (i = 0; i < polygons.length; i += 1) {
+                polygon = this._stripWhitespaceAndParens(polygons[i]);
+                components.push(this.ingest.polygon.apply(this, [polygon]));
+            }
+            return components;
+        },
+
+        /**
+         * Return an array of features given a geometrycollection WKT fragment.
+         * @param   str {String}    A WKT fragment representing the geometry collection
+         * @memberof this.Wkt.Wkt.ingest
+         * @instance
+         */
+        geometrycollection: function (str) {
+            console.log('The geometrycollection WKT type is not yet supported.');
+        }
+
+    }; // eo ingest
+
+    return Wkt;
+}));
