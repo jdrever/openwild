@@ -3,10 +3,10 @@
 
 <h2 class="text-start text-md-center">Search for @if (config('core.axiophytesOnly')) an Axiophyte @else a Species @endif in {{ config('core.region') }}</h2>
 
-<form action="{{ url()->current() }}" method="post">
+<form action="/" method="post">
 @csrf
 <div class="row mb-2">
-	<div id="search-container" class="col-lg-8 mx-auto" position="relative">
+	<div id="search-container" class="col-lg-8 mx-auto">
 		<label for="search" class="form-label visually-hidden">Species name</label>
 		<div class="input-group">
             <input type="text" id="speciesName" class="form-control" name="speciesName" aria-describedby="search-help" placeholder="Species name" value="{{ $speciesName }}"  autocomplete="off"/>
@@ -24,7 +24,7 @@
     @include('data-tables/species-in-dataset')
 </div>
 
-<script type="text/javascript" src="/js/species-name-autocomplete.js"></script>
+<script src="/js/species-name-autocomplete.js"></script>
 
 <script>
 function getUpdateUrl(pageNumber)
@@ -42,6 +42,6 @@ function getUpdateUrl(pageNumber)
 }
 </script>
 
-<script type="text/javascript" src="/js/update-dataset.js"></script>
+<script src="/js/update-dataset.js"></script>
 
 </x-layout>

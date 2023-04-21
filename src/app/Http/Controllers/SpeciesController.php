@@ -51,7 +51,7 @@ class SpeciesController extends Controller
                 'showResults' => false,
             ]);
         } else {
-            return redirect('/species/'.$speciesName.'/type/'.$speciesNameType.'/group/'.$speciesGroup.'/axiophytes/'.$axiophyteFilter);
+            return $this->listForDataset($request, $speciesName, $speciesNameType, $speciesGroup, $axiophyteFilter);
         }
     }
 

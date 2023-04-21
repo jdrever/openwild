@@ -45,7 +45,7 @@ class SitesController extends Controller
                 'showResults' => false,
             ]);
         } else {
-            return redirect('/sites/'.$siteName);
+            return $this->listForDataset($request, $siteName);
         }
     }
 

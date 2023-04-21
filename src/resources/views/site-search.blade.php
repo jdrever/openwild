@@ -1,7 +1,7 @@
 <x-layout>
 
 <h2 class="text-start text-md-center">Search for a Site in {{ config('core.region') }}</h2>
-<form action="/sites/" action="post">
+<form action="/sites/" method="post">
     @csrf
     <div class="row mb-2">
         <div class="col-lg-8 mx-auto">

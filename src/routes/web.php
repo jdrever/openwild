@@ -42,4 +42,6 @@ Route::view('/about', 'about');
 
 Route::view('/offline', 'offline');
 
+Route::post('/test/', [TestController::class, 'index']);
+
 Route::get('/axiophytes', [SpeciesController::class, 'listAllAxiophytes']);
