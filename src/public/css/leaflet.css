@@ -22,8 +22,7 @@
 .leaflet-marker-shadow {
 	-webkit-user-select: none;
 	   -moz-user-select: none;
-	        -ms-user-select: none;
-	    user-select: none;
+	        user-select: none;
 	  -webkit-user-drag: none;
 	}
 /* Prevents IE11 from highlighting tiles in blue */
@@ -562,7 +561,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
 	white-space: nowrap;
 	-webkit-user-select: none;
 	-moz-user-select: none;
-	-ms-user-select: none;
 	user-select: none;
 	pointer-events: none;
 	box-shadow: 0 1px 3px rgba(0,0,0,0.4);
@@ -634,8 +632,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
 	/* Prevent printers from removing background-images of controls. */
 	.leaflet-control {
 		-webkit-print-color-adjust: exact;
-		color-adjust: exact;
-		     print-color-adjust: exact;
+		print-color-adjust: exact;
 		}
 	}
 

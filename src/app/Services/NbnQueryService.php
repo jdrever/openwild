@@ -295,7 +295,7 @@ class NbnQueryService implements QueryService
         $occurrenceResult->siteName = $occurrenceData->raw->location->locationID ?? '';
         $occurrenceResult->locality = $occurrenceData->raw->location->locality ?? '';
         $occurrenceResult->gridReference = $occurrenceData->raw->location->gridReference ?? 'Unknown grid reference';
-        $occurrenceResult->gridReferenceWKT = $occurrenceData->raw->location->gridReferenceWKT;
+        $occurrenceResult->gridReferenceWKT = $occurrenceData->raw->location->gridReferenceWKT ?? 'Unknown WKT grid reference';
         $occurrenceResult->fullDate = 'Not available';
         if (isset($occurrenceData->processed->event->eventDate)) {
             $occurrenceResult->fullDate = date_format(date_create($occurrenceData->processed->event->eventDate), 'jS F Y');

@@ -11,6 +11,10 @@
         {
             "filePath": "src/resources/js",
             "group": "Default"
+        },
+        {
+            "filePath": "src/app/Services",
+            "group": "Default"
         }
     ]
 }
