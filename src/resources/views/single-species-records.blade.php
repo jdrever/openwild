@@ -23,7 +23,9 @@
         <table class="table">
             <thead>
                 <tr>
+    @if (config('core.sitesSearch'))
                     <th>Site</th>
+    @endif
                     <th class="d-none d-sm-table-cell">Square</th>
                     <th class="d-none d-md-table-cell">Collector</th>
                     <th>Year</th>
@@ -33,11 +35,13 @@
             <tbody>
                 @foreach ($results->records as $record)
                     <tr data-uuid="{{ $record->recordId }}">
+                        @if (config('core.sitesSearch'))
                         <td>
                             <a href="/site/{{ $record->site }}/species/{{$speciesName }}">
                                 <?= $record->site ?>
                             </a>
                         </td>
+                        @endif
                         <td class="d-none d-sm-table-cell">
                         <?php if (isset($record->square)) : ?>
                             <a href="/square/{{ $record->square }}/species/{{$speciesName}}">
