@@ -204,6 +204,10 @@ class SpeciesController extends Controller
 
     public function getSpeciesNameAutocomplete($speciesName, $nameType, $speciesGroup)
     {
+        if ($nameType == "commonName") {
+            $nameType .= "Single";
+        }
+
         $results = $this->queryService->getSpeciesNameAutocomplete($speciesName, $nameType, $speciesGroup);
 
         return view('partials/species-search-autocomplete',
