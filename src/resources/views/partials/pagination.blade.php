@@ -1,8 +1,6 @@
 <?php
 //ensure progressive enhancement works by having links pointing to non-AJAX address if JS not enabled
 $urlIfNoJavaScript=str_replace("/refresh","", url()->current());
-echo($urlIfNoJavaScript);
-echo(url()->current());
 ?>
 <nav>
 		<ul class="pagination justify-content-center">
