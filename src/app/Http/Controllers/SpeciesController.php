@@ -41,6 +41,7 @@ class SpeciesController extends Controller
         $speciesGroup = $request->input('speciesGroup') ?? $request->cookie('speciesGroup') ?? 'plants';
         $axiophyteFilter = $request->input('axiophyteFilter') ?? $request->cookie('axiophyteFilter') ?? 'false';
 
+        echo("controller");
         if (!$request->isMethod('post'))
         {
             return view('species-search',
@@ -54,7 +55,9 @@ class SpeciesController extends Controller
         }
         else
         {
-            return $this->listForDataset($request, $speciesName, $speciesNameType, $speciesGroup, $axiophyteFilter);
+            echo("doing redirect");
+            return redirect('/species/'.$speciesName.'/type/'.$speciesNameType.'/group/'.$speciesGroup.'/axiophytes/'.$axiophyteFilter);
+            //return $this->listForDataset($request, $speciesName, $speciesNameType, $speciesGroup, $axiophyteFilter);
         }
     }
 
