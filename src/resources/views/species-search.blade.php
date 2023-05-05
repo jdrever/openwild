@@ -13,7 +13,7 @@
             <button type="submit" data-refresh="true" class="btn btn-primary">List Species</button>
 		</div>
         <div id="autocomplete-container"></div>
-		<small id="search-help" class="form-text text-start text-md-center d-block">Enter all or part of a species name. Try something like "{{ config('core.speciesNameExample')}}".</small>
+		<small id="search-help" class="form-text text-start text-md-center d-block">Enter all or part of a species name. Try something like {{ config('core.speciesNameExample')}}.</small>
 	</div>
 </div>
 
