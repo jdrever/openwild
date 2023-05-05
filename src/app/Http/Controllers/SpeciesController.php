@@ -41,7 +41,8 @@ class SpeciesController extends Controller
         $speciesGroup = $request->input('speciesGroup') ?? $request->cookie('speciesGroup') ?? 'plants';
         $axiophyteFilter = $request->input('axiophyteFilter') ?? $request->cookie('axiophyteFilter') ?? 'false';
 
-        if (! $request->has('speciesName')) {
+        if (!$request->isMethod('post'))
+        {
             return view('species-search',
             [
                 'speciesName' => $speciesName,
@@ -50,7 +51,9 @@ class SpeciesController extends Controller
                 'axiophyteFilter' => $axiophyteFilter,
                 'showResults' => false,
             ]);
-        } else {
+        }
+        else
+        {
             return $this->listForDataset($request, $speciesName, $speciesNameType, $speciesGroup, $axiophyteFilter);
         }
     }

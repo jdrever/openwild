@@ -29,7 +29,7 @@
 <script>
 function getUpdateUrl(pageNumber)
 {
-    let speciesName=document.getElementById("speciesName").value;
+    let speciesName=document.getElementById("speciesName").value.length>0 ? document.getElementById("speciesName").value : 'A';
     let speciesNameType=document.querySelector('input[name="speciesNameType"]:checked').value;
     let speciesGroup=document.querySelector('input[name="speciesGroup"]:checked').value;
     let axiophyteFilter=false;
