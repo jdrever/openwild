@@ -67,7 +67,7 @@
 </div>
 @endisset
 
-<div class="container-fluid content-inner p-3">
+<div class="container-fluid content-inner p-3 bg-light">
 {{ $slot }}
 </div>
 <footer class="page-footer footer-fluid">
