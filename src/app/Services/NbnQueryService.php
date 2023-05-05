@@ -506,7 +506,7 @@ class NbnQueryService implements QueryService
             if (strpos($errorMessage, '400 Bad Request') !== false) {
                 $errorMessage = '<b>It looks like there is a problem with the query.</b>  Here are the details: '.$errorMessage;
             }
-            if (strpos($errorMessage, '500') !== false || strpos($errorMessage, '503') !== false || strpos($errorMessage, 'php_network_getaddresses') !== false || strpos($errorMessage, 'SSL') !== false || strpos($errorMessage, 'stream') !== false) {
+            if (strpos($errorMessage, '500') !== false || strpos($errorMessage, '503') !== false || strpos($errorMessage, '504') !== false || strpos($errorMessage, 'php_network_getaddresses') !== false || strpos($errorMessage, 'SSL') !== false || strpos($errorMessage, 'stream') !== false) {
                 $errorMessage = '<b>It looks like there is a problem with the NBN API</b>.  Here are the details: '.$errorMessage;
             }
             $nbnApiResponse->message = $errorMessage;
