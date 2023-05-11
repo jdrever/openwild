@@ -175,11 +175,12 @@ class NbnQueryService implements QueryService
             ->sortBy('year');
 
         $queryResult = $this->getPagedQueryResult($nbnQuery, $currentPage);
-        $queryResult->records = $this->getSingleSpeciesRecordList($queryResult->records);
-
-        $queryResult->records = $this->prepareSingleSpeciesRecords($queryResult->records);
-        $queryResult->sites = $this->prepareSites($queryResult->records);
-
+        if ($queryResult->status)
+        {
+            $queryResult->records = $this->getSingleSpeciesRecordList($queryResult->records);
+            $queryResult->records = $this->prepareSingleSpeciesRecords($queryResult->records);
+            $queryResult->sites = $this->prepareSites($queryResult->records);
+        }
         return $queryResult;
     }
 

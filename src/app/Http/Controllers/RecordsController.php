@@ -76,7 +76,9 @@ class RecordsController extends Controller
     public function singleSpeciesForSite(Request $request, string $siteName, string $speciesName)
     {
         $currentPage = $this->getCurrentPage($request);
-
+        $speciesNameType = Cookie::get('speciesNameType') ?? 'scientific';
+        $speciesGroup = Cookie::get('speciesGroup') ?? 'plants';
+        $axiophyteFilter = Cookie::get('axiophyteFilter') ?? 'false';
         $results = $this->queryService->getSingleSpeciesRecordsForSite($siteName, $speciesName, $currentPage);
 
         return view('site-species-records',
@@ -84,6 +86,9 @@ class RecordsController extends Controller
             'siteName' => $siteName,
             'speciesName' => $speciesName,
             'results' =>$results,
+            'speciesNameType' => $speciesNameType,
+            'speciesGroup' => $speciesGroup,
+            'axiophyteFilter' => $axiophyteFilter,
         ]);
     }
 
@@ -95,15 +100,23 @@ class RecordsController extends Controller
         $gsSplitPoint = strlen($gridSquare) / 2 + 1;
         $gridSquare = substr($gridSquare, 0, 4).substr($gridSquare, $gsSplitPoint, 2);
 
+        $speciesNameType = Cookie::get('speciesNameType') ?? 'scientific';
+        $speciesGroup = Cookie::get('speciesGroup') ?? 'plants';
+        $axiophyteFilter = Cookie::get('axiophyteFilter') ?? 'false';
+
         $currentPage = $this->getCurrentPage($request);
 
         $results = $this->queryService->getSingleSpeciesRecordsForSquare($gridSquare, $speciesName, $currentPage);
+
 
         return view('square-species-records',
         [
             'gridSquare' => $gridSquare,
             'speciesName' => $speciesName,
             'results' =>$results,
+            'speciesNameType' => $speciesNameType,
+            'speciesGroup' => $speciesGroup,
+            'axiophyteFilter' => $axiophyteFilter,
         ]);
     }
 

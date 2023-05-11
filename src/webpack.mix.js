@@ -12,7 +12,7 @@ const mix = require('laravel-mix');
  */
 
 mix
-    .copy(['resources/js/site-name-autocomplete.js','resources/js/species-name-autocomplete.js','resources/js/update-dataset.js'], 'public/js/')
+    .copy(['resources/js/site-name-autocomplete.js','resources/js/species-name-autocomplete.js','resources/js/update-dataset.js', 'resources/js/back-button.js'], 'public/js/')
     .js(['../src/node_modules/bootstrap/js/src/collapse.js','../src/node_modules/bootstrap/js/src/tab.js'],'public/js/bootstrap.js')
     .copy(['resources/js/BasicMap.js', 'resources/js/Leaflet.MetricGrid.js', 'resources/js/leaflet.wms.js', '../src/node_modules/proj4/dist/proj4.js','../src/node_modules/wicket/wicket.js', '../src/node_modules/brc-atlas-bigr/dist/bigr.min.umd.js', '../src/node_modules/d3/dist/d3.min.js'], 'public/js/')
     .sass('resources/scss/shropshire.scss', 'public/css/shropshire-style.css')

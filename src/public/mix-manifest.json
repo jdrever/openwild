@@ -6,6 +6,7 @@
     "/js/site-name-autocomplete.js": "/js/site-name-autocomplete.js",
     "/js/species-name-autocomplete.js": "/js/species-name-autocomplete.js",
     "/js/update-dataset.js": "/js/update-dataset.js",
+    "/js/back-button.js": "/js/back-button.js",
     "/js/BasicMap.js": "/js/BasicMap.js",
     "/js/Leaflet.MetricGrid.js": "/js/Leaflet.MetricGrid.js",
     "/js/leaflet.wms.js": "/js/leaflet.wms.js",

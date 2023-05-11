@@ -22,7 +22,7 @@ function updateDataset(pageNumber) {
     console.log(updateUrl);
     return fetch(updateUrl,
         {
-            credentials: 'include'
+            credentials: 'include',
         }).then(function (response) {
         console.log("The API call was successful!");
         return response.text();
@@ -52,6 +52,8 @@ function showSpinner() {
     var elem = document.querySelector('#data-table');
     elem.innerHTML = '<div class="text-center"><button class="btn btn-primary" type="button" disabled><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading... </button></div>';
 }
+
+
 
 
 
