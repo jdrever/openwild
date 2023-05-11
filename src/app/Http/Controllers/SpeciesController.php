@@ -72,8 +72,6 @@ class SpeciesController extends Controller
      */
     public function listForDataset(Request $request, string $speciesName, string $speciesNameType, string $speciesGroup, string $axiophyteFilter, string $refresh = '')
     {
-        echo($speciesNameType);
-        echo($speciesGroup);
         Cookie::queue('speciesName', $speciesName);
 
         $this->setCookies($speciesNameType, $speciesGroup, $axiophyteFilter);
