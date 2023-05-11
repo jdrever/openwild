@@ -416,7 +416,8 @@ class NbnQueryBuilder
         } elseif ($speciesGroup === 'Worms') {
             $this->add('species_group:'.'Worms');
         } else {
-            $this->add('species_group:'.'Plants+OR+Bryophytes');
+            //TODO: this is a bit hacky, could do with implmentation of addOr
+            $this->add('(species_group:'.'Plants+OR+species_group:Bryophytes)');
         }
 
         return $this;

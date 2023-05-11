@@ -20,7 +20,10 @@ function updateDataset(pageNumber) {
     showSpinner();
     updateUrl = getUpdateUrl(pageNumber);
     console.log(updateUrl);
-    return fetch(updateUrl).then(function (response) {
+    return fetch(updateUrl,
+        {
+            credentials: 'include'
+        }).then(function (response) {
         console.log("The API call was successful!");
         return response.text();
     }).then(function (html) {
