@@ -38,6 +38,7 @@ function getUpdateUrl(pageNumber)
         axiophyteFilter=document.getElementById("axiophyteFilter").checked;
     }
     let updateUrl='/species/'+speciesName+'/type/'+speciesNameType+'/group/'+speciesGroup+'/axiophytes/'+axiophyteFilter+'/refresh?page='+pageNumber;
+    console.log(updateUrl);
     return updateUrl;
 }
 </script>

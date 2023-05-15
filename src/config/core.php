@@ -18,7 +18,7 @@ return [
     'caching' => env('CACHING', false),
     'resultsPerPage' => env('RESULTS_PER_PAGE', 10),
     'allGroups' => env('ALL_GROUPS',false),
-    'birds' => env('BIRDS',false),
+    'speciesGroups' => env('SPECIES_GROUPS',''),
     'axiophyteFilter' => env('AXIOPHYTE_FILTER', false),
     'axiophytesOnly' => env('AXIOPHYTES_ONLY', false),
     'plantsOrBryophytesFilter' => env('PLANTS_BRYOPHYTES', false),

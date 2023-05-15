@@ -1,3 +1,8 @@
+@php
+
+$speciesGroups=explode(',',config('core.speciesGroups'));
+@endphp
+
 <div class="row justify-content-center gy-3">
 	<div class="form-group col-sm-4 col-lg-3">
 		<div class="form-check">
@@ -39,16 +44,6 @@
             </div>
         </div>
         @endif
-        @if (config('core.birds'))
-        <div class="form-group col-sm-4 col-lg-3">
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="speciesGroup" id="speciesGroup" value="birds" {{ ($speciesGroup=="birds")? "checked" : "" }} />
-                <label class="form-check-label" for="birds">
-                    birds
-                </label>
-            </div>
-        </div>
-        @endif
 		<div class="form-check">
 			<input class="form-check-input" type="radio" name="speciesGroup" id="speciesGroup" value="plants" data-refresh="true" {{ ($speciesGroup=="plants")? "checked" : "" }} />
 			<label class="form-check-label" for="plants">
@@ -69,6 +64,21 @@
 		</div>
 	</div>
     @endif
+    @if (!empty($speciesGroups))
+    <div class="form-group col-sm-4 col-lg-3">
+    @foreach ($speciesGroups as $speciesGroupName)
+        @php ($speciesGroupName=trim($speciesGroupName))
+        <div class="form-group col-sm-4 col-lg-3">
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="speciesGroup" id="speciesGroup" data-refresh="true" value="{{ $speciesGroupName }}" {{ ($speciesGroup==$speciesGroupName)? "checked" : "" }} />
+                <label class="form-check-label" for="{{ $speciesGroupName }}">
+                    {{ strtolower($speciesGroupName) }}
+                </label>
+            </div>
+        </div>
+    @endforeach
+    </div>
+@endif
     @if (config('core.wormsFilter'))
 	<div class="form-group col-sm-4 col-lg-3">
 		<div class="form-check">

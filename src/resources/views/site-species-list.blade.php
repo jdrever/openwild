@@ -44,7 +44,11 @@ function getUpdateUrl(pageNumber)
 {
     let speciesNameType=document.querySelector('input[name="speciesNameType"]:checked').value;
     let speciesGroup=document.querySelector('input[name="speciesGroup"]:checked').value;
-    let axiophyteFilter=document.getElementById("axiophyteFilter").checked;
+    let axiophyteFilter=false;
+    if (document.getElementById("axiophyteFilter")!==null)
+    {
+        axiophyteFilter=document.getElementById("axiophyteFilter").checked;
+    }
     let updateUrl='/site/{{ $siteName }}/type/'+speciesNameType+'/group/'+speciesGroup+'/axiophytes/'+axiophyteFilter+'/refresh?page='+pageNumber;
     return updateUrl;
 }
