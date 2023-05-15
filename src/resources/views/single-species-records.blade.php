@@ -44,9 +44,13 @@
                         @endif
                         <td class="d-none d-sm-table-cell">
                         <?php if (isset($record->square)) : ?>
+                            @if (strlen($record->square)>=6)
                             <a href="/square/{{ $record->square }}/species/{{$speciesName}}">
+                            @endif
                                 {{$record->square}}
+                            @if (strlen($record->square)>=6)
                             </a>
+                            @endif
                         <?php endif ?>
                         </td>
                         <td class="d-none d-md-table-cell">
