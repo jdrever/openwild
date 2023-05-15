@@ -26,8 +26,29 @@
 		</div>
         @endif
 	</div>
-    @if (config('core.plantsOrBryophytesFilter'))
+    @if (config('core.plantsOrBryophytesFilter')||config('core.allGroups'))
 	<div class="form-group col-sm-4 col-lg-3">
+        <!-- TODO: reinstate the all groups search -->
+        @if (config('core.allGroups')&&false)
+        <div class="form-group col-sm-4 col-lg-3">
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="speciesGroup" id="speciesGroup" value="all" checked />
+                <label class="form-check-label" for="worms">
+                    all
+                </label>
+            </div>
+        </div>
+        @endif
+        @if (config('core.birds'))
+        <div class="form-group col-sm-4 col-lg-3">
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="speciesGroup" id="speciesGroup" value="birds" checked />
+                <label class="form-check-label" for="birds">
+                    birds
+                </label>
+            </div>
+        </div>
+        @endif
 		<div class="form-check">
 			<input class="form-check-input" type="radio" name="speciesGroup" id="speciesGroup" value="plants" data-refresh="true" {{ ($speciesGroup=="plants")? "checked" : "" }} />
 			<label class="form-check-label" for="plants">

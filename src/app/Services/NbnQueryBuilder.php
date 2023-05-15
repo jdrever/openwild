@@ -51,6 +51,10 @@ class NbnQueryBuilder
      */
     private $axiophyteFilter = '';
 
+    private $showAllData=false;
+    private $startingLongitude ='';
+    private $startingLatitude ='';
+    private $radius;
     /**
      * TODO: Describe what the $searchType member variable is for.
      *
@@ -134,6 +138,7 @@ class NbnQueryBuilder
         $queryString = $url.'?';
         $queryParameters = array_merge($this->getCoreParameters(), $this->extraQueryParameters);
 
+        //echo(var_dump($this->filterQueryParameters));
         //dd($this->extraQueryParameters);
         $fqAndParameters = implode('%20AND%20', $this->filterQueryParameters);
         $fqNotParameters = '';
@@ -141,6 +146,7 @@ class NbnQueryBuilder
             $fqNotParameters = '%20AND%20NOT%20'.implode('%20AND%20NOT%20', $this->filterNotQueryParameters);
         }
         $queryString .= 'q='.implode('%20AND%20', $queryParameters).'&';
+        //echo($queryString);
         $queryString .= 'fq='.$fqAndParameters.$fqNotParameters.'&';
         $queryString .= 'facets='.$this->facets.'&';
         $queryString .= 'sort='.$this->sort.'&';
@@ -406,18 +412,19 @@ class NbnQueryBuilder
      */
     public function addSpeciesGroup(string $speciesGroup): self
     {
-        //TODO: #4 refactor speciesGroup handling to make more generic
         $speciesGroup = ucfirst($speciesGroup);
+        if($speciesGroup==='All') { return $this; }
         if ($speciesGroup === 'Plants') {
             $this->add('species_group:'.'Plants');
             $this->addNot('species_group:'.'Bryophytes');
-        } elseif ($speciesGroup === 'Bryophytes') {
-            $this->add('species_group:'.'Bryophytes');
-        } elseif ($speciesGroup === 'Worms') {
-            $this->add('species_group:'.'Worms');
-        } else {
-            //TODO: this is a bit hacky, could do with implmentation of addOr
+        }
+        else if ($speciesGroup === 'Both')
+        {
             $this->add('(species_group:'.'Plants+OR+species_group:Bryophytes)');
+        }
+        else
+        {
+            $this->add('species_group:'.$speciesGroup);
         }
 
         return $this;
